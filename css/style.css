@@ -182,14 +182,14 @@ body {
 }
 .home-title {
   background: linear-gradient(
-    90deg, 
-    #f4e4ba 0%, 
-    #d4af37 25%, 
-    #ffd700 50%, 
-    #d4af37 75%, 
+    90deg,
+    #f4e4ba 0%,
+    #d4af37 25%,
+    #ffd700 50%,
+    #d4af37 75%,
     #f4e4ba 100%
   );
-   background-size: 200% 100%;
+  background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -197,13 +197,17 @@ body {
   font-size: var(--fs-5xl);
   font-weight: normal;
   text-shadow: none;
-   animation: shimmer 10s linear infinite;
+  animation: shimmer 10s linear infinite;
   filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8));
 }
 
 @keyframes shimmer {
-  0% { background-position: -100% 0; }
-  100% { background-position: 100% 0; }
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
 }
 
 .home-menu .buttons {
@@ -267,5 +271,87 @@ body {
 
 .home-menu .buttons .menu-btn:active {
   background-position: 100% 50%;
+  transform: scale(0.98);
+}
+
+/* Game Screen */
+
+.screen.game {
+}
+
+/* Pause Menu */
+
+#pause-menu {
+  max-width: 28rem;
+  padding: 2rem 4rem;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("../assets/images/frames/pause-overlay.png");
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 51%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-xl);
+  border: 3px solid var(--tomb);
+  border-bottom-width: 9px;
+}
+
+#pause-menu h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(
+    90deg,
+    #f4e4ba 0%,
+    #d4af37 25%,
+    #ffd700 50%,
+    #d4af37 75%,
+    #f4e4ba 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: var(--font-title);
+  font-size: var(--fs-3xl);
+  font-weight: normal;
+  text-shadow: none;
+  animation: shimmer 10s linear infinite;
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8));
+}
+
+#pause-menu .buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+#pause-menu .buttons .menu-btn {
+  width: 12rem;
+  height: 5rem;
+  background-color: transparent;
+  border: none;
+  background-image: url("../assets/images/UI components/button-sprite.png");
+  background-size: 375% 580%;
+  background-position: 5% 50.5%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  font-family: var(--font-menu);
+  font-size: var(--fs-lg);
+  color: var(--stone-dark);
+  font-weight: 500;
+  user-select: none;
+}
+
+#pause-menu .buttons .menu-btn:hover {
+  background-position: 50% 50.5%;
+  transform: scale(1.02);
+}
+
+#pause-menu .buttons .menu-btn:active {
+  background-position: 95% 50.5%;
+  color: var(--sand-light);
   transform: scale(0.98);
 }
