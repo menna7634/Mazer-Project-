@@ -24,7 +24,7 @@ function animateKey(x,y){
     gameFrame++;
     requestAnimationFrame(animateKey);
 }
-
+// canvas width 1180 height 500
 function loadLevelMaze(level){
     let maze = mazesArr[level-1];
     loadAllImages().then(() => {
@@ -34,16 +34,19 @@ function loadLevelMaze(level){
 }
 
 function drawMaze(maze){
+    console.log(maze.length , maze[0].length);
     for(let i=0;i<maze.length;i++){
         for(let j=0;j<maze[i].length;j++){
-            if(maze[j][i] == 0){
+            if(maze[i][j] === 0){
                 console.log(i,j);
                 drawPath(j,i);
-            }else if(maze[j][i] == 1){
+            }else if(maze[i][j] === 1){
                 drawWall(j,i);
-            }else if(maze[j][i] == 5){
+            }else if(maze[i][j] === 5){
                 drawDoor(j,i);
-            }
+            }/*else if(maze[i][j] === 3){
+                drawKey(j,i);
+            }*/
         }
     }
 }
@@ -57,6 +60,9 @@ function drawWall(x,y){
 
 function drawDoor(x,y){
     ctx.drawImage(door , x*TILE_SIZE , y*TILE_SIZE , TILE_SIZE , TILE_SIZE);
+}
+function drawKey(x,y){
+    animateKey(x,y);
 }
 
 //loadLevelMaze(1);
