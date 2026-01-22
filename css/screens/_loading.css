@@ -14,39 +14,53 @@
 .loading-screen.active {
   display: flex;
 }
-.loading-screen::after {
-  content: "𓀀𓀁𓀂𓀃𓀄𓀅𓀆𓀇𓀈𓀉𓀊𓀋𓀌𓀍𓀎𓀏𓀐𓀑𓀒𓀓𓀔𓀕𓀖𓀗𓀘𓀙𓀚𓀀𓀁𓀂𓀃𓀄𓀅𓀆𓀇𓀈𓀉𓀊𓀋𓀌𓀍𓀎𓀏𓀐𓀑𓀒𓀓𓀔𓀕𓀖𓀗𓀘𓀙𓀚𓀛𓀜𓀝𓀞𓀟𓀠𓀡𓀢𓀣𓀤𓀥𓀦𓀧𓀨𓀩𓀪𓀫𓀬𓀭𓀮𓀯𓀰𓀱𓀲𓀳𓀴𓀵𓀶𓀷𓀸𓀹𓀺𓀻𓀼𓀽𓀾𓀿𓁀𓁁𓁂𓁃𓁄𓁅𓁆𓁇𓁈𓁉𓁊𓁋𓁌𓁍𓁎𓁏𓁐𓁑𓁒𓁓𓁔𓁕𓁖𓁗𓁘𓁙𓁚𓁛𓁜𓁝𓁞𓁟𓁠𓁡𓁢𓁣𓁤𓁥𓁦𓁧𓁨𓁩𓁪𓁫𓁬𓁭𓁮𓁯𓁰𓁱𓁲𓁳𓁴𓁵𓁶𓁷𓀛𓀜𓀝𓀞𓀟𓀠𓀡𓀢𓀣𓀤𓀥𓀦𓀧𓀨𓀩𓀪𓀫𓀬𓀭𓁮𓁯𓁰𓁱𓁲𓁳𓁴𓁵𓁶𓁷𓀮𓀯𓀰𓀱𓀲𓀳𓀴𓀵𓀶𓀷𓀸𓀹𓀺𓀻𓀼𓀽𓀾𓀿𓁀𓁁𓁂𓁃𓁄𓁅𓁆𓁇𓁈𓁉𓁊𓁋𓁌𓁍𓁎𓁏𓁐𓁑𓁒𓁓𓁔𓁕𓁖𓁗𓁘𓁙𓀀𓀁𓀂𓀃𓀄𓀅𓀆𓀇𓀈𓀉𓁉𓁊𓁋𓁌𓁍𓁎𓁏𓁐𓁑𓁒𓁓𓁔𓁕𓁖𓁗𓁘𓁙𓁚𓁛𓁜𓁝𓁞𓁟𓁠𓁡𓁢𓁣𓁤𓁥𓁦𓁧𓁨𓁩𓁪𓁫𓁬𓁭𓁮𓁯𓁰𓁱𓁲𓁳𓁴𓁵𓁶𓁷";
+.loading-screen .scrolling-content {
+  display: flex;
+  gap: 0;
   position: absolute;
   top: 0;
   left: 0;
-  width: 200%;
   height: 100vh;
+  overflow: hidden;
+  width: 250%;
+  animation: infiniteScroll 30s linear infinite;
+}
+
+.loading-screen .scrolling-content .hiero {
+  flex-shrink: 0;
+  line-height: 1.2;
+  color: rgba(139, 115, 85, 0.15);
   font-family: "Hieroglyphics", sans-serif;
   font-size: 3rem;
-  color: rgba(139, 115, 85, 0.15);
-  line-height: 1.2;
   word-wrap: break-word;
-  animation: scrollHiero 30s linear infinite;
+  width: 50%;
+  overflow: hidden;
 }
-@keyframes scrollHiero {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(-25%, 0); }
+
+@keyframes infiniteScroll {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-50%, 0);
+  }
 }
-.loading-content {
+.loading-screen .loading-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-lg);
   z-index: 1;
 }
-.loading-icon {
+.loading-screen .loading-icon {
   font-size: 8rem;
   color: var(--gold);
   animation: pulseGlow 2s ease-in-out infinite;
   filter: drop-shadow(0 0 20px var(--gold));
 }
 @keyframes pulseGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
     transform: scale(0.95);
     filter: drop-shadow(0 0 10px var(--gold-dark));
@@ -57,15 +71,20 @@
     filter: drop-shadow(0 0 40px var(--gold));
   }
 }
-.loading-text {
+.loading-screen .loading-text {
   font-family: var(--font-display);
   font-size: var(--fs-xl);
   color: var(--gold);
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  animation: fadeText 1.5s ease-in-out infinite;
+  animation: fadeText 2s ease-in-out infinite;
 }
 @keyframes fadeText {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }

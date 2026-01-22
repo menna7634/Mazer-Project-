@@ -1,33 +1,81 @@
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.8);
 }
-.modal-overlay.active {
-  display: flex;
-}
-.modal-box {
-  width: 100%;
-  max-width: 700px;
-  aspect-ratio: 1 / 1;
-  background-image: url("../../assets/images/frames/modal .png");
-  background-size: contain;
-  background-repeat: no-repeat;
+
+/* Pause Menu */
+#pause-menu {
+  max-width: 28rem;
+  padding: 2rem 4rem;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("../../assets/images/frames/pause-overlay.png");
+  background-size: cover;
   background-position: center;
+  position: absolute;
+  top: 51%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-xl);
+  border: 3px solid var(--tomb);
+  border-bottom-width: 9px;
+}
+
+#pause-menu h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(
+    90deg,
+    #f4e4ba 0%,
+    #d4af37 25%,
+    #ffd700 50%,
+    #d4af37 75%,
+    #f4e4ba 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: var(--font-title);
+  font-size: var(--fs-3xl);
+  font-weight: normal;
+  animation: shimmer 10s linear infinite;
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8));
+}
+#pause-menu .buttons {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: var(--spacing-xl);
+  gap: var(--spacing-lg);
 }
-.modal-wrapper {
+
+/* dialog#pause-menu {
+  max-width: 28rem;
+  padding: 2rem 4rem;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("../../assets/images/frames/pause-overlay.png");
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 51%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-xl);
+  border: 3px solid var(--tomb);
+  border-bottom-width: 9px;
+} */
+dialog#confirmation-modal {
+  max-width: 32rem;
+  background-image: url("../../assets/images/frames/modal .png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  top: 51%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+/* .modal-wrapper {
   width: 60%;
   height: 55%;
   display: flex;
@@ -64,4 +112,4 @@
 }
 .modal-actions .menu-btn {
   transform: scale(0.7);
-}
+} */
