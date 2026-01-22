@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Player Controller Test</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #1e1e1e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    canvas {
+      border: 2px solid #fff;
+      background: #ccc;
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+
+<body>
+
+<canvas id="game" width="512" height="512"></canvas>
+
+<script type="module">
+  import { createPlayer } from '../js/player/PlayerController.js';
+
+
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+
+  const CELL_SIZE = 64;
+  const camera = { x: 0, y: 0 };
+
+
+  const maze = [
+    [0,0,0,0,0,0,0,0],
+    [0,1,1,1,0,1,1,0],
+    [0,0,0,1,0,0,0,0],
+    [0,1,0,0,0,1,0,0],
+    [0,1,0,1,0,0,0,0],
+    [0,0,0,1,0,1,1,0],
+    [0,1,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0]
+  ];
+
+  const playerImage = new Image();
+  playerImage.src =
+    'character-spritesheet.png';
+
+  playerImage.onerror = () => {
+    console.error('❌ Player sprite failed to load:', playerImage.src);
+  };
+
+  playerImage.onload = () => {
+    console.log('✅ Player sprite loaded');
+
+    const player = createPlayer({
+      startX: 1,
+      startY: 1,
+      lives: 3,
+      maze,
+      spriteImage: playerImage,
+      spriteConfig: {
+        frameWidth: 64,
+        frameHeight: 64,
+        totalFrames: 9
+      }
+    });
+
+   
+    window.addEventListener('keydown', e => {
+      switch (e.key) {
+        case 'ArrowUp':
+          player.movePlayer(0, -1);
+          break;
+        case 'ArrowDown':
+          player.movePlayer(0, 1);
+          break;
+        case 'ArrowLeft':
+          player.movePlayer(-1, 0);
+          break;
+        case 'ArrowRight':
+          player.movePlayer(1, 0);
+          break;
+      }
+    });
+
+   
+    let lastTime = performance.now();
+
+    function gameLoop(time) {
+      const deltaTime = time - lastTime;
+      lastTime = time;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawMaze();
+      player.update(deltaTime);
+      player.draw(ctx, CELL_SIZE, camera);
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop(lastTime);
+  };
+
+
+  function drawMaze() {
+    for (let y = 0; y < maze.length; y++) {
+      for (let x = 0; x < maze[y].length; x++) {
+        ctx.fillStyle = maze[y][x] === 1 ? '#333' : '#aaa';
+        ctx.fillRect(
+          x * CELL_SIZE,
+          y * CELL_SIZE,
+          CELL_SIZE,
+          CELL_SIZE
+        );
+      }
+    }
+  }
+</script>
+
+</body>
+</html>

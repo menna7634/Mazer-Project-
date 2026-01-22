@@ -8,15 +8,11 @@ export function createPlayer({
   lives,
   maze,
   spriteImage,
-  spriteConfig
 }) {
   const player = new Player(startX, startY, lives);
   const movement = new PlayerMovement(player, maze);
   const sprite = new PlayerSprite(
-    spriteImage,
-    spriteConfig.frameWidth,
-    spriteConfig.frameHeight,
-    spriteConfig.totalFrames
+    spriteImage
   );
 
   return {
@@ -33,7 +29,9 @@ export function createPlayer({
         cellSize,
         camera
       );
+
     },
+
 
     movePlayer: (dx, dy) => movement.movePlayer(dx, dy),
     resetPlayerPosition: () => player.resetPlayerPosition(),
