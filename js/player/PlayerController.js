@@ -2,63 +2,45 @@ import Player from "./Player.js";
 import PlayerMovement from "./PlayerMovement.js";
 import PlayerSprite from "./PlayerSprite.js";
 
-export default class PlayerController {
-  constructor(config) {
-    this.player = new Player(
-      config.startX,
-      config.startY,
-      config.lives
-    );
+export function createPlayer({
+  startX,
+  startY,
+  lives,
+  maze,
+  spriteImage,
+  spriteConfig
+}) {
+  const player = new Player(startX, startY, lives);
+  const movement = new PlayerMovement(player, maze);
+  const sprite = new PlayerSprite(
+    spriteImage,
+    spriteConfig.frameWidth,
+    spriteConfig.frameHeight,
+    spriteConfig.totalFrames
+  );
 
-    this.movement = new PlayerMovement(
-      this.player,
-      config.isWalkable
-    );
+  return {
+    update(deltaTime) {
+      sprite.update(deltaTime, player.isMoving());
+      player.setMoving(false);
+    },
 
-    this.sprite = new PlayerSprite(
-      config.spriteImage,
-      config.cellSize
-    );
-  }
+    draw(ctx, cellSize, camera) {
+      sprite.draw(
+        ctx,
+        player.getPlayerPosition(),
+        player.getDirection(),
+        cellSize,
+        camera
+      );
+    },
 
-
-  createPlayer() {
-    return this;
-  }
-
-  resetPlayerPosition() {
-    this.player.resetPlayerPosition();
-  }
-
-  movePlayer(dx, dy, maze) {
-    return this.movement.move(dx, dy, maze);
-  }
-
-  getPlayerPosition() {
-    return this.player.getPlayerPosition();
-  }
-
-  setPlayerPosition(x, y) {
-    this.player.setPlayerPosition(x, y);
-  }
-
-  loseLife() {
-    this.player.loseLife();
-  }
-
-  gainLife() {
-    this.player.gainLife();
-  }
-
-  getLivesCount() {
-    return this.player.getLivesCount();
-  }
-
-  isPlayerAlive() {
-    return this.player.isPlayerAlive();
-  }
-
-  draw(ctx) {
-    this.sprite.draw(ctx, this.getPlayerPosition());
-  }
+    movePlayer: (dx, dy) => movement.movePlayer(dx, dy),
+    resetPlayerPosition: () => player.resetPlayerPosition(),
+    getPlayerPosition: () => player.getPlayerPosition(),
+    loseLife: () => player.loseLife(),
+    gainLife: () => player.gainLife(),
+    getLivesCount: () => player.getLivesCount(),
+    isPlayerAlive: () => player.isPlayerAlive()
+  };
 }
