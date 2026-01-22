@@ -1,37 +1,42 @@
-// Timer.js
 
 import HUD from './HUD.js';
 
 class Timer {
   constructor() {
-    this.seconds = 0;
-    this.intervalId = null;
+    this.timeLeft = 0;
+    this.timerId = null;
     this.isPaused = false;
+    this.gameReference = null;
   }
 
-  start() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
+  startCountdown(seconds, game) {
+    this.timeLeft = seconds;
+    this.gameReference = game;
+    
+    if (this.timerId) {
+      clearInterval(this.timerId);
     }
 
-    this.intervalId = setInterval(() => {
+    HUD.updateTimer(this.timeLeft);
+
+    this.timerId = setInterval(() => {
       if (!this.isPaused) {
-        this.seconds++;
-        HUD.updateTimer(this.seconds);
+        this.timeLeft = this.timeLeft - 1;
+        HUD.updateTimer(this.timeLeft);
+        
+        if (this.timeLeft <= 0) {
+          this.stop();
+          this.gameReference.gameOver();
+        }
       }
     }, 1000);
   }
 
   stop() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
+    if (this.timerId) {
+      clearInterval(this.timerId);
+      this.timerId = null;
     }
-  }
-
-  reset() {
-    this.seconds = 0;
-    this.stop();
   }
 
   pause() {
