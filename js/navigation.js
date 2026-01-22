@@ -26,6 +26,10 @@ document.getElementById('btn-new-game').addEventListener('click', () => {
   setTimeout(() => {
     showScreen('game');
     document.querySelector('.gate-modal').classList.remove('closing');
+
+    if (window.game) {
+      window.game.startGame();
+    }
   }, 3600);
   setTimeout(() => {
     document.querySelector('.gate-modal').classList.add('opening');
