@@ -1,44 +1,87 @@
 
-export const StorageSystem = {
-    // keys I use to save data in the browser
-    KEYS: { 
-        LEVEL: 'mazer_level', 
-        LIVES: 'mazer_lives',
-    },
 
-    // Function to save current game state
-    save: function(level, lives) {
-        try {
-            localStorage.setItem(this.KEYS.LEVEL, level);
-            localStorage.setItem(this.KEYS.LIVES, lives);
 
-            // to look state saved for test
-            console.log(`Saved: Level ${level}, Lives ${lives}`);
-        } catch (error) {
-            // If any thing wrong
-            console.warn("Storage warning: Could not save data.");
-        }
-    },
+class StorageSystem {
 
-    // Function to load saved data when game starts
-    load: function() {
-        const savedLevel = localStorage.getItem(this.KEYS.LEVEL);
-        const savedLives = localStorage.getItem(this.KEYS.LIVES);
-        
-        // If there is no saved level return null I mean cnsider new game
-        if (!savedLevel || !savedLives) {
-            return null;
-        }
-
-        return {
-            level: parseInt(savedLevel),
-            lives: parseInt(savedLives),
-        };
-    },
-
-    // Function to delete everything Game Over or New Game
-    clear: function() {
-        localStorage.removeItem(this.KEYS.LEVEL);
-        localStorage.removeItem(this.KEYS.LIVES);
+  static saveToSlot(slotNumber, gameData) {
+    if (slotNumber < 1 || slotNumber > 3) {
+      console.error('Slot must be 1, 2, or 3');
+      return false;
     }
-};
+
+    const saveData = {
+      level: gameData.level,
+      hearts: gameData.hearts,
+      keys: gameData.keys,
+      time: gameData.time,
+      playerPosition: gameData.playerPosition,
+      date: new Date().toISOString()
+    };
+
+    const key = `mazer_save_slot_${slotNumber}`;
+    localStorage.setItem(key, JSON.stringify(saveData));
+
+    console.log(`Saved to Slot ${slotNumber}`);
+    return true;
+  }
+
+  static loadFromSlot(slotNumber) {
+    if (slotNumber < 1 || slotNumber > 3) {
+      console.error('Slot must be 1, 2, or 3');
+      return null;
+    }
+
+    const key = `mazer_save_slot_${slotNumber}`;
+    const savedData = localStorage.getItem(key);
+
+    if (!savedData) {
+      return null;
+    }
+
+    return JSON.parse(savedData);
+  }
+
+  static deleteSlot(slotNumber) {
+    if (slotNumber < 1 || slotNumber > 3) {
+      console.error('Slot must be 1, 2, or 3');
+      return false;
+    }
+
+    const key = `mazer_save_slot_${slotNumber}`;
+    localStorage.removeItem(key);
+
+    console.log(`Slot ${slotNumber} deleted`);
+    return true;
+  }
+
+  static isSlotEmpty(slotNumber) {
+    const key = `mazer_save_slot_${slotNumber}`;
+    return localStorage.getItem(key) === null;
+  }
+
+  static getAllSlots() {
+    const slots = [];
+
+    for (let i = 1; i <= 3; i++) {
+      const data = this.loadFromSlot(i);
+
+      slots.push({
+        slotNumber: i,
+        isEmpty: data === null,
+        data: data
+      });
+    }
+
+    return slots;
+  }
+
+  static clearAll() {
+    for (let i = 1; i <= 3; i++) {
+      this.deleteSlot(i);
+    }
+    console.log('All slots cleared');
+    return true;
+  }
+}
+
+export { StorageSystem };

@@ -1,43 +1,28 @@
-.menu-btn { 
-  width: 256px;
-  height: 130px;
+.menu-btn {
+  width: 12rem;
+  height: 6rem;
+  background-color: transparent;
+  border: none;
   background-image: url("../../assets/images/UI components/button-sprite.png");
-  background-size: 300% 500%;
-  background-position: 0% 50%;
+  background-size: 375% 580%;
+  background-position: 5% 50.5%;
   background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--stone-dark);
-  font-family: var(--font-display);
-  font-size: var(--fs-base);
-  font-weight: 600;
   cursor: pointer;
-  text-align: center;
-}
-.menu-btn h3 {
-  margin: 0;
-  padding: 0;
   font-family: var(--font-menu);
   font-size: var(--fs-lg);
-  font-weight: 500;
   color: var(--stone-dark);
+  font-weight: 500;
 }
 .menu-btn:hover {
-  background-position: 50% 50%;
-  transform: scale(1.05);
-}
-.menu-btn:hover h3 {
-  transform: translate(-2px, 0);
+  background-position: 50% 50.5%;
+  transform: scale(1.02);
 }
 .menu-btn:active {
-  background-position: 100% 50%;
-  transform: scale(0.98);
-}
-.menu-btn:active h3 {
-  transform: scale(0.98);
+  background-position: 95% 50.5%;
   color: var(--sand-light);
+  transform: scale(0.98);
 }
+
 .btn-back {
   margin-top: var(--spacing-lg);
 }

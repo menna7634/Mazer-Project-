@@ -33,9 +33,13 @@ export function createPlayer({
     },
 
 
-    movePlayer: (dx, dy) => movement.movePlayer(dx, dy),
+    movePlayer: (dx, dy) => {
+      if (sprite.isMoving()) return false;
+      return movement.movePlayer(dx, dy);
+    },
     resetPlayerPosition: () => player.resetPlayerPosition(),
     getPlayerPosition: () => player.getPlayerPosition(),
+    getVisualPosition: () => sprite.getVisualPosition(),
     loseLife: () => player.loseLife(),
     gainLife: () => player.gainLife(),
     getLivesCount: () => player.getLivesCount(),
