@@ -1,5 +1,5 @@
-const animationSpeed = 40;
-const moveSpeed = 0.04;
+const animationSpeed = 100;
+const moveSpeed = 0.08;
 
 export default class EnemySprite {
   constructor(image) {
@@ -43,8 +43,17 @@ export default class EnemySprite {
     this.visualX += (this.targetX - this.visualX) * moveSpeed;
     this.visualY += (this.targetY - this.visualY) * moveSpeed;
 
-    const srcX = this.currentFrame * this.frameWidth;
-    const srcY = direction * this.frameHeight;
+    const directionMap = {
+    0: 0, // up    
+    1: 3, // left  
+    2: 2, // down  
+    3: 1  // right 
+  };
+
+  const spriteDirection = directionMap[direction];
+
+  const srcX = this.currentFrame * this.frameWidth;
+  const srcY = spriteDirection * this.frameHeight;
 
     ctx.drawImage(
       this.image,
