@@ -1,18 +1,16 @@
 .screen.game {
-  padding: var(--spacing-sm);
+  padding: 0;
+  overflow: hidden;
 }
 .game-arena {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: var(--tomb);
   position: relative;
-  border: var(--fs-xs) solid #8b7045;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 0 15px rgba(139, 112, 69, 0.4);
 }
 .playground {
   position: absolute;

@@ -1,4 +1,4 @@
-const animationSpeed = 60;
+const animationSpeed = 30;
 const moveSpeed = 0.1;
 
 export default class PlayerSprite {

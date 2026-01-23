@@ -6,17 +6,19 @@
   box-sizing: border-box;
   user-select: none;
 }
+html,
+body {
+  overflow: hidden;
+  height: 100vh;
+}
 html {
   font-size: 16px;
-  scroll-behavior: smooth;
 }
 body {
   font-family: var(--font-body);
   background-color: var(--night);
   color: var(--papyrus);
   line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
 }
 .screen {
   display: none;
