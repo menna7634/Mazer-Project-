@@ -47,10 +47,27 @@ class Game {
     loadLevelMaze(num).then(() => {
       const sprite = new Image();
       sprite.onload = () => {
+        let startX = 0;
+        let startY = 0;
+        let lives = 3;
+        
+        if (this.savedData) {
+          if (this.savedData.playerPosition) {
+            startX = this.savedData.playerPosition.x;
+            startY = this.savedData.playerPosition.y;
+          }
+          if (this.savedData.hearts) {
+            lives = this.savedData.hearts;
+          }
+          if (this.savedData.keys) {
+            this.keys = this.savedData.keys;
+          }
+        }
+        
         this.player = createPlayer({
-          startX: 0,
-          startY: 0,
-          lives: 3, 
+          startX: startX,
+          startY: startY,
+          lives: lives, 
           maze: this.maze,
           spriteImage: sprite
         });
@@ -70,14 +87,19 @@ class Game {
       if (num === 2) timeForLevel = 120;
       if (num === 3) timeForLevel = 180;
       
+      if (this.savedData && this.savedData.time) {
+        timeForLevel = this.savedData.time;
+        this.savedData = null; 
+      }
+      
       this.timer.startCountdown(timeForLevel, this);
     })
   }
 
   move(dir) {
     if (!this.running || this.paused || !this.player) return;
-    
     let dx = 0, dy = 0;
+
     if (dir === 'left') dx = -1;
     if (dir === 'right') dx = 1;
     if (dir === 'up') dy = -1;
@@ -85,13 +107,13 @@ class Game {
     
     if (this.player.movePlayer(dx, dy)) {
       const newPos = this.player.getPlayerPosition();
-      
       this.handleTile(newPos.x, newPos.y);
       this.updateUI();
       
       if (!this.player.isPlayerAlive()) {
         this.gameOver();
-      } else if (this.checkWin(newPos)) {
+      } 
+      else if (this.checkWin(newPos)) {
         this.nextLvl();
       }
     }
@@ -126,7 +148,9 @@ class Game {
 
   nextLvl() {
     this.timer.stop();
-    setTimeout(() => this.loadLvl(this.lvl + 1), 2000);
+    this.lvl = this.lvl + 1; 
+    this.rollingSave();      
+    setTimeout(() => this.loadLvl(this.lvl), 2000);
   }
 
   gameOver() {
@@ -143,6 +167,20 @@ class Game {
   togglePause(shouldPause) {
     this.paused = shouldPause;
     shouldPause ? this.timer.pause() : this.timer.resume();
+  }
+
+  exitGame() {
+    let wantSave = confirm('Do you want to save your progress?');
+    
+    if (wantSave) {
+      this.rollingSave();
+    }
+    
+    this.running = false;
+    this.timer.stop();
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+    }
   }
 
   updateUI() {
@@ -200,30 +238,43 @@ class Game {
   }
 
   save(slot) {
-    const pos = this.player.getPlayerPosition();
+    if (!this.player) return;
+    let pos = this.player.getPlayerPosition();
+    let hearts = this.player.getLivesCount();
     StorageSystem.saveToSlot(slot, {
       level: this.lvl,
-      hearts: this.hearts,
+      hearts: hearts,
       keys: this.keys,
-      time: this.timer.seconds,
+      time: this.timer.timeLeft,
       playerPosition: pos
     });
   }
 
+  rollingSave() {
+    let slot1 = StorageSystem.loadFromSlot(1);
+    let slot2 = StorageSystem.loadFromSlot(2);
+    
+    if (slot2) {
+      StorageSystem.saveToSlot(3, slot2);
+    }
+    
+    if (slot1) {
+      StorageSystem.saveToSlot(2, slot1);
+    }
+    
+    this.save(1);
+  }
+
   load(slot) {
-    const data = StorageSystem.loadFromSlot(slot);
+    let data = StorageSystem.loadFromSlot(slot);
     if (!data) return false;
     
     this.lvl = data.level;
-    this.hearts = data.hearts;
     this.keys = data.keys;
-    this.timer.seconds = data.time;
+    
+    this.savedData = data;
     
     this.loadLvl(this.lvl);
-    
-    if (data.playerPosition) {
-      this.player.setPlayerPosition(data.playerPosition.x, data.playerPosition.y);
-    }
     
     return true;
   }
