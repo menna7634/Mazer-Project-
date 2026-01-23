@@ -16,7 +16,7 @@ class Game {
     this.paused = false;
     this.maze = null;
     this.player = null;
-    // this.enemies = []; 
+    this.enemies = []; 
     this.timer = new Timer();
     
     this.canvas = document.getElementById('canvas');
@@ -44,12 +44,13 @@ class Game {
     this.running = true;
     this.paused = false;
     this.keys = 0;
-   // this.enemies = [];
+    this.enemies = []; 
     this.maze = mazes[num - 1];
     
     loadLevelMaze(num).then(() => {
       const sprite = new Image();
-     // const enemySprite = new Image();
+      const enemySprite = new Image(); 
+      
       sprite.onload = () => {
         let startX = 0;
         let startY = 0;
@@ -76,11 +77,16 @@ class Game {
           spriteImage: sprite
         });
         
-        
         this.startGameLoop();
       };
+      
+      enemySprite.onload = () => {
+        this.spawnEnemies(enemySprite);
+      };
+      
       sprite.src = 'assets/sprites/player/player.png';
-    //  enemySprite.src = 'assets/images/game play /characters/enimies/mummy-02.png';
+      enemySprite.src = 'assets/images/game play /characters/enimies/mummy-02.png';
+      
       this.updateUI();
       
       let timeForLevel = 60; 
@@ -97,6 +103,24 @@ class Game {
     })
   }
 
+  spawnEnemies(spriteImage) {
+    for (let y = 0; y < this.maze.length; y++) {
+      for (let x = 0; x < this.maze[y].length; x++) {
+        if (this.maze[y][x] === 10) {
+          const enemy = createEnemy({
+            x: x,
+            y: y,
+            maze: this.maze,
+            spriteImage: spriteImage
+          });
+          this.enemies.push(enemy);
+          // Convert enemy spawn point to walkable path
+          this.maze[y][x] = 0;
+        }
+      }
+    }
+  }
+
   move(dir) {
     if (!this.running || this.paused || !this.player) return;
     let dx = 0, dy = 0;
@@ -109,6 +133,7 @@ class Game {
     if (this.player.movePlayer(dx, dy)) {
       const newPos = this.player.getPlayerPosition();
       this.handleTile(newPos.x, newPos.y);
+      this.checkEnemyCollision(newPos.x, newPos.y);
       this.updateUI();
       
       if (!this.player.isPlayerAlive()) {
@@ -116,6 +141,19 @@ class Game {
       } 
       else if (this.checkWin(newPos)) {
         this.nextLvl();
+      }
+    }
+  }
+
+  checkEnemyCollision(playerX, playerY) {
+    for (let enemy of this.enemies) {
+      const enemyPos = enemy.getPosition();
+      if (enemyPos.x === playerX && enemyPos.y === playerY) {
+        this.player.loseLife();
+        if (!this.player.isPlayerAlive()) {
+          this.gameOver();
+        }
+        break;
       }
     }
   }
@@ -134,8 +172,7 @@ class Game {
       this.keys++;
       this.maze[y][x] = 0; 
     }
-    //console.log(this.keys)
-    //console.log(this.maze[this.maze.length - 1].length-1 , this.maze.length - 1)
+    
     if(this.keys === 3){
       this.maze[this.maze.length - 1][this.maze[this.maze.length - 1].length - 1] = 6;
     }
@@ -226,11 +263,35 @@ class Game {
     }
     
     animateKeys(this.camera); 
-    if (!this.paused && this.player) {
-      this.player.update(deltaTime);
-      this.renderPlayer();
-    } else if (this.player) {
+    
+    if (!this.paused) {
+      // Update and render enemies
+      for (let enemy of this.enemies) {
+        enemy.update(deltaTime);
+        enemy.draw(this.ctx, this.TILE_SIZE, this.camera);
+        
+        // Check collision after enemy movement
+        const enemyPos = enemy.getPosition();
+        const playerPos = this.player.getPlayerPosition();
+        if (enemyPos.x === playerPos.x && enemyPos.y === playerPos.y) {
+          this.player.loseLife();
+          if (!this.player.isPlayerAlive()) {
+            this.gameOver();
+          }
+        }
+      }
+      
+      if (this.player) {
+        this.player.update(deltaTime);
         this.renderPlayer();
+      }
+    } else {
+      for (let enemy of this.enemies) {
+        enemy.draw(this.ctx, this.TILE_SIZE, this.camera);
+      }
+      if (this.player) {
+        this.renderPlayer();
+      }
     }
     
     this.animationFrameId = requestAnimationFrame(this.gameLoop);

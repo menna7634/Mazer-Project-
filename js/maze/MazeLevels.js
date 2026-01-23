@@ -5,6 +5,7 @@
 // 4 = Monster (static obstacle)
 // 5 = Exit/Door (goal)
 // 6 = Open closed Door
+// 10 = start position of enemy
 let mazes = [
   [
   [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 3, 0, 1, 0, 0, 0, 1, 0, 2, 0],
