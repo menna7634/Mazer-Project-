@@ -43,9 +43,34 @@ class Game {
     this.lvl = num;
     this.running = true;
     this.paused = false;
-    this.keys = 0;
     this.enemies = [];
-    this.maze = mazes[num - 1].map((row) => [...row]);
+    
+    let savedKeys = null;
+    let savedMaze = null;
+    let savedTime = null;
+    let savedHearts = null;
+    let savedPosition = null;
+    
+    if (this.savedData) {
+      savedKeys = this.savedData.keys;
+      savedMaze = this.savedData.mazeState;
+      savedTime = this.savedData.time;
+      savedHearts = this.savedData.hearts;
+      savedPosition = this.savedData.playerPosition;
+      this.savedData = null;
+    }
+    
+    if (savedKeys !== null) {
+      this.keys = savedKeys;
+    } else {
+      this.keys = 0;
+    }
+    
+    if (savedMaze) {
+      this.maze = savedMaze.map((row) => [...row]);
+    } else {
+      this.maze = mazes[num - 1].map((row) => [...row]);
+    }
 
     playLevelMusic(num);
 
@@ -58,17 +83,12 @@ class Game {
         let startY = 0;
         let lives = 3;
 
-        if (this.savedData) {
-          if (this.savedData.playerPosition) {
-            startX = this.savedData.playerPosition.x;
-            startY = this.savedData.playerPosition.y;
-          }
-          if (this.savedData.hearts) {
-            lives = this.savedData.hearts;
-          }
-          if (this.savedData.keys) {
-            this.keys = this.savedData.keys;
-          }
+        if (savedPosition) {
+          startX = savedPosition.x;
+          startY = savedPosition.y;
+        }
+        if (savedHearts) {
+          lives = savedHearts;
         }
 
         this.player = createPlayer({
@@ -87,8 +107,7 @@ class Game {
       };
 
       sprite.src = "assets/sprites/player/player.png";
-      enemySprite.src =
-        "assets/images/game play /characters/enimies/mummy-02.png";
+      enemySprite.src = "assets/images/game play /characters/enimies/mummy-02.png";
 
       this.updateUI();
 
@@ -97,9 +116,8 @@ class Game {
       if (num === 2) timeForLevel = 120;
       if (num === 3) timeForLevel = 180;
 
-      if (this.savedData && this.savedData.time) {
-        timeForLevel = this.savedData.time;
-        this.savedData = null;
+      if (savedTime) {
+        timeForLevel = savedTime;
       }
 
       this.timer.startCountdown(timeForLevel, this);
@@ -125,8 +143,9 @@ class Game {
 
   move(dir) {
     if (!this.running || this.paused || !this.player) return;
-    let dx = 0,
-      dy = 0;
+    
+    let dx = 0;
+    let dy = 0;
 
     if (dir === "left") dx = -1;
     if (dir === "right") dx = 1;
@@ -174,35 +193,69 @@ class Game {
     }
 
     if (this.keys === 3) {
-      this.maze[this.maze.length - 1][
-        this.maze[this.maze.length - 1].length - 1
-      ] = 6;
+      this.maze[this.maze.length - 1][this.maze[this.maze.length - 1].length - 1] = 6;
     }
   }
 
   checkWin(pos) {
-    if (this.maze[pos.y][pos.x] !== 5 && this.maze[pos.y][pos.x] !== 6)
+    const tile = this.maze[pos.y][pos.x];
+    
+    if (tile !== 5 && tile !== 6) {
       return false;
-    for (let row of this.maze) {
-      for (let tile of row) {
-        if (tile === 3) return false;
-      }
     }
-    return true;
+    
+    if (tile === 6) {
+      return true;
+    }
+    
+    if (tile === 5 && this.keys >= 3) {
+      return true;
+    }
+    
+    return false;
   }
 
   nextLvl() {
     this.timer.stop();
     this.lvl = this.lvl + 1;
-    this.rollingSave();
-    console.log("You reached Level " + this.lvl);
+    
+    if (this.lvl <= mazes.length) {
+      const freshMaze = [];
+      const templateMaze = mazes[this.lvl - 1];
+      for (let i = 0; i < templateMaze.length; i++) {
+        freshMaze[i] = [];
+        for (let j = 0; j < templateMaze[i].length; j++) {
+          freshMaze[i][j] = templateMaze[i][j];
+        }
+      }
+      
+      let nextTime = 60;
+      if (this.lvl === 2) nextTime = 120;
+      if (this.lvl === 3) nextTime = 180;
+      
+      const slot1 = StorageSystem.loadFromSlot(1);
+      const slot2 = StorageSystem.loadFromSlot(2);
+      
+      if (slot2) StorageSystem.saveToSlot(3, slot2);
+      if (slot1) StorageSystem.saveToSlot(2, slot1);
+      
+      StorageSystem.saveToSlot(1, {
+        level: this.lvl,
+        hearts: 3,
+        keys: 0,
+        time: nextTime,
+        playerPosition: { x: 0, y: 0 },
+        mazeState: freshMaze
+      });
+    }
+    
     gateModal(() => {
-      if (this.lvl === 4) {
+      if (this.lvl > mazes.length) {
         showScreen("win-screen");
       } else {
         this.loadLvl(this.lvl);
       }
-    }); // Pass callback
+    });
   }
 
   gameOver() {
@@ -213,7 +266,6 @@ class Game {
       cancelAnimationFrame(this.animationFrameId);
     }
 
-    console.log("Game Over! You reached Level " + this.lvl);
     gateModal(() => {
       showScreen("lose-screen");
     });
@@ -221,20 +273,11 @@ class Game {
 
   togglePause(shouldPause) {
     this.paused = shouldPause;
-    shouldPause ? this.timer.pause() : this.timer.resume();
-  }
-
-  exitGame() {
-    let wantSave = confirm("Do you want to save your progress?");
-
-    if (wantSave) {
-      this.rollingSave();
-    }
-
-    this.running = false;
-    this.timer.stop();
-    if (this.animationFrameId) {
-      cancelAnimationFrame(this.animationFrameId);
+    
+    if (shouldPause) {
+      this.timer.pause();
+    } else {
+      this.timer.resume();
     }
   }
 
@@ -278,12 +321,10 @@ class Game {
     animateKeys(this.camera);
 
     if (!this.paused) {
-      // Update and render enemies
       for (let enemy of this.enemies) {
         enemy.update(deltaTime);
         enemy.draw(this.ctx, this.TILE_SIZE, this.camera);
 
-        // Check collision after enemy movement
         const enemyPos = enemy.getPosition();
         const playerPos = this.player.getPlayerPosition();
         if (enemyPos.x === playerPos.x && enemyPos.y === playerPos.y) {
@@ -307,7 +348,6 @@ class Game {
       }
     }
 
-    // Draw spotlight effect last
     if (this.player && this.ctx) {
       this.lightCircle();
     }
@@ -317,78 +357,36 @@ class Game {
 
   renderPlayer() {
     if (!this.player || !this.ctx) return;
-
     this.player.draw(this.ctx, this.TILE_SIZE, this.camera);
   }
 
-  save(slot) {
-    if (!this.player) return;
-    let pos = this.player.getPlayerPosition();
-    let hearts = this.player.getLivesCount();
-    StorageSystem.saveToSlot(slot, {
-      level: this.lvl,
-      hearts: hearts,
-      keys: this.keys,
-      time: this.timer.timeLeft,
-      playerPosition: pos,
-    });
-  }
-
-  rollingSave() {
-    let slot1 = StorageSystem.loadFromSlot(1);
-    let slot2 = StorageSystem.loadFromSlot(2);
-
-    if (slot2) {
-      StorageSystem.saveToSlot(3, slot2);
-    }
-
-    if (slot1) {
-      StorageSystem.saveToSlot(2, slot1);
-    }
-
-    this.save(1);
-  }
-
   load(slot) {
-    let data = StorageSystem.loadFromSlot(slot);
+    const data = StorageSystem.loadFromSlot(slot);
     if (!data) return false;
 
-    this.lvl = data.level;
-    this.keys = data.keys;
-
     this.savedData = data;
-
-    this.loadLvl(this.lvl);
+    this.loadLvl(data.level);
 
     return true;
   }
 
   lightCircle() {
-    // Check if player and camera are defined
     if (!this.player || !this.camera) return;
 
-    // Get player position
-    let playerPos = this.player.getVisualPosition();
+    const playerPos = this.player.getVisualPosition();
 
-    let playerXCord =
-      playerPos.x * this.TILE_SIZE - this.camera.x + this.TILE_SIZE / 2;
-    let playerYCord =
-      playerPos.y * this.TILE_SIZE - this.camera.y + this.TILE_SIZE / 2;
+    const playerXCord = playerPos.x * this.TILE_SIZE - this.camera.x + this.TILE_SIZE / 2;
+    const playerYCord = playerPos.y * this.TILE_SIZE - this.camera.y + this.TILE_SIZE / 2;
 
-    // Define the radius of the light and the width of the fade
     const lightRadius = 200;
-    const fadeWidth = 50; // Controls how soft the edge is
+    const fadeWidth = 50;
 
     this.ctx.save();
 
-    // --- 1. Draw the Dark Overlay with Smooth Edges ---
-
-    // Calculate a radius that ensures the gradient covers the corners of the screen
     const maxRadius = Math.sqrt(
       Math.pow(this.canvas.width, 2) + Math.pow(this.canvas.height, 2),
     );
 
-    // Create a gradient from the player outwards
     const darknessGradient = this.ctx.createRadialGradient(
       playerXCord,
       playerYCord,
@@ -398,21 +396,17 @@ class Game {
       maxRadius,
     );
 
-    // Calculate gradient stops as a percentage (0.0 to 1.0) of maxRadius
-    // Stop 1: Transparent center (fully visible area)
     const startFade = (lightRadius - fadeWidth) / maxRadius;
-    // Stop 2: Fully black (where darkness begins completely)
     const endFade = lightRadius / maxRadius;
 
-    darknessGradient.addColorStop(0, "rgba(0, 0, 0, 0)"); // Center is clear
-    darknessGradient.addColorStop(Math.max(0, startFade), "rgba(0, 0, 0, 0)"); // Stays clear until here
-    darknessGradient.addColorStop(endFade, "rgba(0, 0, 0, 0.98)"); // Fades to black here
-    darknessGradient.addColorStop(1, "rgba(0, 0, 0, 0.98)"); // Remainder is black
+    darknessGradient.addColorStop(0, "rgba(0, 0, 0, 0)");
+    darknessGradient.addColorStop(Math.max(0, startFade), "rgba(0, 0, 0, 0)");
+    darknessGradient.addColorStop(endFade, "rgba(0, 0, 0, 0.98)");
+    darknessGradient.addColorStop(1, "rgba(0, 0, 0, 0.98)");
 
     this.ctx.fillStyle = darknessGradient;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // --- 2. Add the warm glow effect (Your existing logic) ---
     this.ctx.globalCompositeOperation = "lighter";
     const glowGradient = this.ctx.createRadialGradient(
       playerXCord,
@@ -440,44 +434,39 @@ class Game {
 const game = new Game();
 window.game = game;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const btnNewGame = document.getElementById("btn-new-game");
-  if (btnNewGame) {
-    btnNewGame.addEventListener("click", () => {
-      game.start();
-    });
-  }
-});
-
-window.onPause = () => {
-  game.togglePause(true);
-  document.getElementById("pause-menu").showModal();
-};
-
-window.onResume = () => {
+window.onResume = function() {
   game.togglePause(false);
   document.getElementById("pause-menu").close();
 };
 
-window.onRestart = () => {
-  game.loadLvl(game.lvl);
+window.onRestart = function() {
   document.getElementById("pause-menu").close();
+  game.loadLvl(game.lvl);
 };
 
-window.onQuit = () => {
+window.onQuit = function() {
   document.getElementById("pause-menu").close();
   game.running = false;
   game.timer.stop();
+  showScreen("home");
 };
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && game.running) {
-    if (game.paused) {
-      window.onResume();
-    } else {
-      window.onPause();
+  if (e.key === "Escape") {
+    if (game.running) {
+      e.preventDefault();
+      
+      if (game.paused) {
+        window.onResume();
+      } else {
+        game.togglePause(true);
+        const pauseMenu = document.getElementById("pause-menu");
+        if (pauseMenu) {
+          pauseMenu.showModal();
+        }
+      }
+      return;
     }
-    return;
   }
 
   if (!game.running || game.paused) return;
