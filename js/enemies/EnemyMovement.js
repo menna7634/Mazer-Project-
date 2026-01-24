@@ -2,20 +2,25 @@ export default class EnemyMovement {
   constructor(enemy, maze) {
     this.enemy = enemy;
     this.maze = maze;
-
     const { x, y } = enemy.getPosition();
     this.dir = this.chooseInitialDirection(x, y);
-
     this.moveDelay = 600;
     this.lastMoveTime = 0;
+    this.isCurrentlyMoving = false;
+    this.justMoved = false;
   }
 
-  update() {
+  update(deltaTime) { 
+    this.isCurrentlyMoving = false;
+    this.justMoved = false;
+    
     const now = performance.now();
-    if (now - this.lastMoveTime < this.moveDelay) return;
+    if (now - this.lastMoveTime < this.moveDelay) {
+      this.isCurrentlyMoving = true;
+      return;
+    }
 
     this.lastMoveTime = now;
-
     const { x, y } = this.enemy.getPosition();
     let dx = 0, dy = 0;
 
@@ -31,41 +36,38 @@ export default class EnemyMovement {
       this.enemy.setPosition(nx, ny);
       this.enemy.setDirection(this.dir);
       this.enemy.setMoving(true);
+      this.isCurrentlyMoving = true;
+      this.justMoved = true;
     } else {
       this.dir = this.chooseNewDirection(x, y);
+      this.enemy.setMoving(false);
     }
   }
 
   chooseInitialDirection(x, y) {
     const options = [];
-    if (this.canMoveTo(x, y - 1)) options.push(0); // up
-    if (this.canMoveTo(x - 1, y)) options.push(1); // left
-    if (this.canMoveTo(x, y + 1)) options.push(2); // down
-    if (this.canMoveTo(x + 1, y)) options.push(3); // right
-
-    if (options.length === 0) return 2; // fallback
+    if (this.canMoveTo(x, y - 1)) options.push(0);
+    if (this.canMoveTo(x - 1, y)) options.push(1);
+    if (this.canMoveTo(x, y + 1)) options.push(2);
+    if (this.canMoveTo(x + 1, y)) options.push(3);
+    if (options.length === 0) return 2;
     return options[Math.floor(Math.random() * options.length)];
   }
 
   chooseNewDirection(x, y) {
     const options = [];
-    if (this.canMoveTo(x, y - 1) && this.dir !== 2) options.push(0); // up
-    if (this.canMoveTo(x - 1, y) && this.dir !== 3) options.push(1); // left
-    if (this.canMoveTo(x, y + 1) && this.dir !== 0) options.push(2); // down
-    if (this.canMoveTo(x + 1, y) && this.dir !== 1) options.push(3); // right
-
-    if (options.length === 0) return this.reverseDirection(this.dir); 
+    if (this.canMoveTo(x, y - 1) && this.dir !== 2) options.push(0);
+    if (this.canMoveTo(x - 1, y) && this.dir !== 3) options.push(1);
+    if (this.canMoveTo(x, y + 1) && this.dir !== 0) options.push(2);
+    if (this.canMoveTo(x + 1, y) && this.dir !== 1) options.push(3);
+    if (options.length === 0) return this.reverseDirection(this.dir);
     return options[Math.floor(Math.random() * options.length)];
   }
 
   canMoveTo(x, y) {
-    if (
-      y < 0 ||
-      y >= this.maze.length ||
-      x < 0 ||
-      x >= this.maze[0].length
-    ) return false;
-
+    if (y < 0 || y >= this.maze.length || x < 0 || x >= this.maze[0].length) {
+      return false;
+    }
     return this.maze[y][x] === 0;
   }
 

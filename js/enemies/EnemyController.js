@@ -11,9 +11,9 @@ export function createEnemy({ x, y, maze, spriteImage }) {
   const sprite = new EnemySprite(spriteImage);
 
   return {
-    update(deltaTime) {
-      movement.update();
-      sprite.update(deltaTime, enemy.isMoving());
+     update(deltaTime) {
+      movement.update(deltaTime);
+      sprite.update(deltaTime, movement.isCurrentlyMoving || sprite.isMoving());
       enemy.setMoving(false);
     },
 
