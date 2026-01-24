@@ -121,7 +121,7 @@ class Game {
 
       sprite.src = "assets/sprites/player/player.png";
       enemySprite.src =
-        "assets/images/game play /characters/enimies/mummy-02.png";
+        "assets/images/gameplay/characters/enimies/mummy-02.png";
 
       this.updateUI();
 
