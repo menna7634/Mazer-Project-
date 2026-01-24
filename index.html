@@ -12,9 +12,9 @@
     <dialog id="pause-menu">
       <h2>pause</h2>
       <menu class="buttons">
-        <button onClick="resume()" class="menu-btn">Resume</button>
-        <button onClick="restart()" class="menu-btn">Restart</button>
-        <button onClick="quit()" class="menu-btn">Quit</button>
+        <button onClick="onResume()" class="menu-btn">Resume</button>
+        <button onClick="onRestart()" class="menu-btn">Restart</button>
+        <button onClick="onQuit()" class="menu-btn">Quit</button>
       </menu>
     </dialog>
     <dialog id="confirmation-modal">
@@ -48,13 +48,13 @@
       <section class="screen home active">
         <h2>Mazer</h2>
         <menu class="buttons">
-          <button onClick="newGame()" class="menu-btn" id="btn-new-game">
+          <button  class="menu-btn" id="btn-new-game">
             New Game
           </button>
-          <button onClick="loadGame()" class="menu-btn" id="btn-load-game">
+          <button class="menu-btn" id="btn-load-game">
             Load Game
           </button>
-          <button onClick="settings()" class="menu-btn" id="btn-settings">
+          <button class="menu-btn" id="btn-settings">
             Settings
           </button>
         </menu>
@@ -169,7 +169,27 @@
         </div>
       </section>
 
-      <section class="screen"></section>
+      <section class="screen win-screen ">
+        <div class="win-screen-container">
+        <div class="menu-btn btn-home" id="btn-win-home">
+          <h3>Home</h3>
+        </div>
+        <div class="menu-btn btn-new-game" id="btn-win-new-game">
+          <h3>New Game</h3>
+        </div>
+        </div>
+      </section>
+
+      <section class="screen lose-screen ">
+        <div class="lose-screen-container">
+        <div class="menu-btn btn-home" id="btn-lose-home">
+          <h3>Home</h3>
+        </div>
+        <div class="menu-btn btn-new-game" id="btn-lose-new-game">
+          <h3>Retry</h3>
+        </div>
+        </div>
+      </section>
     </main>
 
     <script type="module" src="./js/navigation.js"></script>

@@ -4,7 +4,7 @@ import { images, loadAllImages } from "./ImageLoader.js";
 let canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let mazesArr = mazes;
-const TILE_SIZE = 80;
+const TILE_SIZE = 120;
 
 // Import images
 let path = images.path;
@@ -12,8 +12,8 @@ let wall = images.wall;
 let door = images.door;
 let key = images.key;
 let gem = images.gem;
-let openDoor = images.openDoor;
 let trap = images.trap;
+let openDoor = images.openDoor;
 let KeyspriteWidth = 125;   // ← Exact: 500 ÷ 4 = 125
 let KeyspriteHeight = 500;  // ← Exact: full height
 let GemspriteWidth = 169.25;  // ← Exact: 677 ÷ 4 = 169.25
@@ -28,23 +28,53 @@ let trapPositions = [];
 let currentCamera = { x: 0, y: 0 };
 
 function animateKeys(camera = { x: 0, y: 0 }) {
-    currentCamera = camera;
-    gameFrame++;
-    let position = Math.floor(gameFrame / staggerFrames) % 4;
-    keyPositions.forEach(({ x, y }) => {
-        ctx.drawImage(path, x * TILE_SIZE - camera.x, y * TILE_SIZE - camera.y, TILE_SIZE, TILE_SIZE);
-        frameX = KeyspriteWidth * position;
-        ctx.drawImage(key, frameX, 0, KeyspriteWidth, KeyspriteHeight, x * TILE_SIZE - camera.x, y * TILE_SIZE - camera.y, TILE_SIZE + 10, TILE_SIZE + 20);
-    });
+  currentCamera = camera;
+  gameFrame++;
+  let position = Math.floor(gameFrame / staggerFrames) % 4;
+  keyPositions.forEach(({ x, y }) => {
+    ctx.drawImage(
+      path,
+      x * TILE_SIZE - camera.x,
+      y * TILE_SIZE - camera.y,
+      TILE_SIZE,
+      TILE_SIZE,
+    );
+    frameX = KeyspriteWidth * position;
+    ctx.drawImage(
+      key,
+      frameX,
+      0,
+      KeyspriteWidth,
+      KeyspriteHeight,
+      x * TILE_SIZE - camera.x,
+      y * TILE_SIZE - camera.y,
+      TILE_SIZE + 10,
+      TILE_SIZE + 20,
+    );
+  });
 
-    gemPositions.forEach(({ x, y }) => {
-        ctx.drawImage(path, x * TILE_SIZE - camera.x, y * TILE_SIZE - camera.y, TILE_SIZE, TILE_SIZE);
-        frameX = GemspriteWidth * position;
-        ctx.drawImage(gem, frameX, 0, GemspriteWidth, GemspriteHeight, x * TILE_SIZE - camera.x, y * TILE_SIZE - camera.y, TILE_SIZE, TILE_SIZE);
-    });
+  gemPositions.forEach(({ x, y }) => {
+    ctx.drawImage(
+      path,
+      x * TILE_SIZE - camera.x,
+      y * TILE_SIZE - camera.y,
+      TILE_SIZE,
+      TILE_SIZE,
+    );
+    frameX = GemspriteWidth * position;
+    ctx.drawImage(
+      gem,
+      frameX,
+      0,
+      GemspriteWidth,
+      GemspriteHeight,
+      x * TILE_SIZE - camera.x,
+      y * TILE_SIZE - camera.y,
+      TILE_SIZE,
+      TILE_SIZE,
+    );
+  });
 }
-
-
 
 // canvas width 1180 height 500
 function loadLevelMaze(level,camera = {x:0 , y:0}) {
@@ -88,8 +118,9 @@ function drawMaze(maze, camera = { x: 0, y: 0 }) {
                 drawElement(j,i,trap);
             }
         }
+
     }
-}
+  }
 
 function drawElement(x,y,image){
     ctx.drawImage(image, x * TILE_SIZE - currentCamera.x, y * TILE_SIZE - currentCamera.y, TILE_SIZE, TILE_SIZE);
@@ -141,5 +172,6 @@ function getTrapPositions() { // return trap positions
 function removeElementfromMaze(row, col) { // remove life from maze and draw tile above it
     drawPath(col, row);
 }
+
 
 export { loadLevelMaze, drawMaze, animateKeys};

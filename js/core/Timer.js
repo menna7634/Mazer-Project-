@@ -12,6 +12,7 @@ class Timer {
   startCountdown(seconds, game) {
     this.timeLeft = seconds;
     this.gameReference = game;
+    this.isPaused = false;
     
     if (this.timerId) {
       clearInterval(this.timerId);

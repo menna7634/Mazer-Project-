@@ -1,11 +1,8 @@
 
-
-
 class StorageSystem {
 
   static saveToSlot(slotNumber, gameData) {
     if (slotNumber < 1 || slotNumber > 3) {
-      console.error('Slot must be 1, 2, or 3');
       return false;
     }
 
@@ -15,19 +12,17 @@ class StorageSystem {
       keys: gameData.keys,
       time: gameData.time,
       playerPosition: gameData.playerPosition,
+      mazeState: gameData.mazeState,
       date: new Date().toISOString()
     };
 
     const key = `mazer_save_slot_${slotNumber}`;
     localStorage.setItem(key, JSON.stringify(saveData));
-
-    console.log(`Saved to Slot ${slotNumber}`);
     return true;
   }
 
   static loadFromSlot(slotNumber) {
     if (slotNumber < 1 || slotNumber > 3) {
-      console.error('Slot must be 1, 2, or 3');
       return null;
     }
 
@@ -43,14 +38,11 @@ class StorageSystem {
 
   static deleteSlot(slotNumber) {
     if (slotNumber < 1 || slotNumber > 3) {
-      console.error('Slot must be 1, 2, or 3');
       return false;
     }
 
     const key = `mazer_save_slot_${slotNumber}`;
     localStorage.removeItem(key);
-
-    console.log(`Slot ${slotNumber} deleted`);
     return true;
   }
 
@@ -79,7 +71,6 @@ class StorageSystem {
     for (let i = 1; i <= 3; i++) {
       this.deleteSlot(i);
     }
-    console.log('All slots cleared');
     return true;
   }
 }
