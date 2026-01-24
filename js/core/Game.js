@@ -105,6 +105,7 @@ class Game {
           spriteImage: sprite,
         });
 
+        this.updateUI(); // Update HUD with new player stats
         this.startGameLoop();
       };
 
@@ -115,7 +116,7 @@ class Game {
       sprite.src = "assets/sprites/player/player.png";
       enemySprite.src = "assets/images/game play /characters/enimies/mummy-02.png";
 
-      this.updateUI();
+      // this.updateUI() was here, moved to inside listener
 
       let timeForLevel = 60;
       if (num === 1) timeForLevel = 90;

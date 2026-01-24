@@ -149,52 +149,6 @@ document.getElementById("btn-lose-new-game").addEventListener("click", () => {
     }
   });
 });
-
-// Pause menu functions
-window.resume = () => {
-  if (window.game) {
-    window.game.togglePause(false);
-  }
-  const pauseMenu = document.getElementById('pause-menu');
-  if (pauseMenu) {
-    pauseMenu.close();
-  }
-};
-
-window.restart = () => {
-  const pauseMenu = document.getElementById('pause-menu');
-  if (pauseMenu) {
-    pauseMenu.close();
-  }
-  
-  if (window.game) {
-    window.game.savedData = null;
-    window.game.keys = 0;
-    window.game.togglePause(false);
-    window.game.loadLvl(window.game.lvl);
-  }
-};
-
-window.quit = () => {
-  const pauseMenu = document.getElementById('pause-menu');
-  if (pauseMenu) {
-    pauseMenu.close();
-  }
-  
-  if (window.game) {
-    window.game.running = false;
-    window.game.paused = false;
-    window.game.timer.stop();
-    
-    if (window.game.animationFrameId) {
-      cancelAnimationFrame(window.game.animationFrameId);
-    }
-  }
-  showScreen('home');
-};
-
-
-
 function refreshSlots() {
   const slots = StorageSystem.getAllSlots();
   
