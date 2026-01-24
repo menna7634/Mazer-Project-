@@ -1,5 +1,5 @@
-import { mazes } from "./MazeLevels.js";
-import { images, loadAllImages } from "./ImageLoader.js";
+import { mazes } from "/MazeLevels.js";
+import { images, loadAllImages } from "/ImageLoader.js";
 
 let canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");

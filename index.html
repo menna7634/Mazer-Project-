@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/style.css" />
-    <link rel="icon" type="image/png" href="./assets/images/favicon.png" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
     <title>Mazer</title>
   </head>
   <body>
@@ -52,11 +52,8 @@
         </menu>
       </section>
       <section class="screen game">
-        <!-- button to just test puase menu and will make the function get triggered by esc key -->
-        <!-- <button onClick="onPause()">Pause</button> -->
         <div class="game-arena">
           <div class="playground">
-            <!-- HUD - positioned at top of frame -->
             <div class="hud">
               <div class="hud-item heart-hud">
                 <span class="hud-content">❤️❤️❤️</span>
@@ -71,9 +68,7 @@
                 <span class="hud-content">Level 1</span>
               </div>
             </div>
-            <!-- Game Canvas Container -->
             <div class="game-canvas-container">
-              <!-- Canvas will be created by JS here -->
               <canvas id="canvas" width="1180px" height="510px"></canvas>
             </div>
           </div>
@@ -169,7 +164,7 @@
       </section>
     </main>
 
-    <script type="module" src="./js/navigation.js"></script>
-    <script type="module" src="./js/core/Game.js"></script>
+    <script type="module" src="/js/navigation.js"></script>
+    <script type="module" src="/js/core/Game.js"></script>
   </body>
 </html>
