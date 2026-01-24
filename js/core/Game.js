@@ -6,7 +6,7 @@ import { createEnemy } from "../enemies/EnemyController.js";
 import HUD from "./HUD.js";
 import Timer from "./Timer.js";
 import Camera from "./Camera.js";
-import { gateModal, showScreen } from "../navigation.js";
+import { gateModal, showScreen, playLevelMusic } from "../navigation.js";
 
 class Game {
   constructor() {
@@ -21,7 +21,7 @@ class Game {
 
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas ? this.canvas.getContext("2d") : null;
-    this.TILE_SIZE = 80;
+    this.TILE_SIZE = 120;
 
     this.camera = new Camera(
       this.canvas ? this.canvas.width : 800,
@@ -46,6 +46,8 @@ class Game {
     this.keys = 0;
     this.enemies = [];
     this.maze = mazes[num - 1].map((row) => [...row]);
+
+    playLevelMusic(num);
 
     loadLevelMaze(num).then(() => {
       const sprite = new Image();
@@ -195,7 +197,7 @@ class Game {
     this.rollingSave();
     console.log("You reached Level " + this.lvl);
     gateModal(() => {
-      if (this.lvl === 2) {
+      if (this.lvl === 4) {
         showScreen("win-screen");
       } else {
         this.loadLvl(this.lvl);
@@ -305,6 +307,11 @@ class Game {
       }
     }
 
+    // Draw spotlight effect last
+    if (this.player && this.ctx) {
+      this.lightCircle();
+    }
+
     this.animationFrameId = requestAnimationFrame(this.gameLoop);
   };
 
@@ -354,6 +361,79 @@ class Game {
     this.loadLvl(this.lvl);
 
     return true;
+  }
+
+  lightCircle() {
+    // Check if player and camera are defined
+    if (!this.player || !this.camera) return;
+
+    // Get player position
+    let playerPos = this.player.getVisualPosition();
+
+    let playerXCord =
+      playerPos.x * this.TILE_SIZE - this.camera.x + this.TILE_SIZE / 2;
+    let playerYCord =
+      playerPos.y * this.TILE_SIZE - this.camera.y + this.TILE_SIZE / 2;
+
+    // Define the radius of the light and the width of the fade
+    const lightRadius = 200;
+    const fadeWidth = 50; // Controls how soft the edge is
+
+    this.ctx.save();
+
+    // --- 1. Draw the Dark Overlay with Smooth Edges ---
+
+    // Calculate a radius that ensures the gradient covers the corners of the screen
+    const maxRadius = Math.sqrt(
+      Math.pow(this.canvas.width, 2) + Math.pow(this.canvas.height, 2),
+    );
+
+    // Create a gradient from the player outwards
+    const darknessGradient = this.ctx.createRadialGradient(
+      playerXCord,
+      playerYCord,
+      0,
+      playerXCord,
+      playerYCord,
+      maxRadius,
+    );
+
+    // Calculate gradient stops as a percentage (0.0 to 1.0) of maxRadius
+    // Stop 1: Transparent center (fully visible area)
+    const startFade = (lightRadius - fadeWidth) / maxRadius;
+    // Stop 2: Fully black (where darkness begins completely)
+    const endFade = lightRadius / maxRadius;
+
+    darknessGradient.addColorStop(0, "rgba(0, 0, 0, 0)"); // Center is clear
+    darknessGradient.addColorStop(Math.max(0, startFade), "rgba(0, 0, 0, 0)"); // Stays clear until here
+    darknessGradient.addColorStop(endFade, "rgba(0, 0, 0, 0.98)"); // Fades to black here
+    darknessGradient.addColorStop(1, "rgba(0, 0, 0, 0.98)"); // Remainder is black
+
+    this.ctx.fillStyle = darknessGradient;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // --- 2. Add the warm glow effect (Your existing logic) ---
+    this.ctx.globalCompositeOperation = "lighter";
+    const glowGradient = this.ctx.createRadialGradient(
+      playerXCord,
+      playerYCord,
+      0,
+      playerXCord,
+      playerYCord,
+      lightRadius,
+    );
+
+    glowGradient.addColorStop(0, "rgba(255, 200, 100, 0.1)");
+    glowGradient.addColorStop(0.4, "rgba(255, 150, 50, 0.2)");
+    glowGradient.addColorStop(0.7, "rgba(255, 100, 0, 0.1)");
+    glowGradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+    this.ctx.fillStyle = glowGradient;
+    this.ctx.beginPath();
+    this.ctx.arc(playerXCord, playerYCord, lightRadius, 0, Math.PI * 2);
+    this.ctx.fill();
+
+    this.ctx.restore();
   }
 }
 

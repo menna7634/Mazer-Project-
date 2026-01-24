@@ -3,32 +3,49 @@ import { StorageSystem } from "./storage/storage.js";
 document.body.addEventListener(
   "click",
   () => {
-    if (bgMusic.paused && document.getElementById("toggle-music").checked) {
-      bgMusic.play();
+    if (
+      currentMusic.paused &&
+      document.getElementById("toggle-music").checked
+    ) {
+      currentMusic.play();
     }
   },
   { once: true },
 );
 
 document.getElementById("toggle-music").addEventListener("change", (e) => {
-  e.target.checked ? bgMusic.play() : bgMusic.pause();
+  e.target.checked ? currentMusic.play() : currentMusic.pause();
 });
 
 document.querySelectorAll(".menu-btn").forEach((btn) => {
   btn.addEventListener("click", playBtnSound);
 });
 
+const gateCloseSfx = new Audio("../assets/sounds/stoneGateClosing.mp3");
+const gateOpenSfx = new Audio("../assets/sounds/stoneGateOpenning.mp3");
+
 export function gateModal(onMiddle) {
   document.querySelector(".gate-modal").classList.add("closing");
+  if (document.getElementById("toggle-sfx").checked) {
+    gateCloseSfx.currentTime = 0;
+    gateCloseSfx.play();
+  }
 
   setTimeout(() => {
     if (onMiddle) onMiddle();
     document.querySelector(".gate-modal").classList.remove("closing");
     document.querySelector(".gate-modal").classList.add("opening");
+
+    if (document.getElementById("toggle-sfx").checked) {
+      gateOpenSfx.currentTime = 0;
+      gateOpenSfx.play();
+    }
   }, 2500);
 
   setTimeout(() => {
     document.querySelector(".gate-modal").classList.remove("opening");
+    gateOpenSfx.pause();
+    gateOpenSfx.currentTime = 0;
   }, 1500);
 }
 
@@ -73,17 +90,53 @@ document.getElementById("btn-lose-new-game").addEventListener("click", () =>
 );
 
 export function showScreen(screenClass) {
+  if (screenClass === "home") {
+    playLevelMusic(0);
+  }
   document
     .querySelectorAll(".screen")
     .forEach((s) => s.classList.remove("active"));
   document.querySelector(`.screen.${screenClass}`)?.classList.add("active");
 }
 
-const bgMusic = new Audio(
-  "../assets/sounds/Ancient Egyptian Music – The Nile River.mp3",
+const levelSoundTracks = {
+  0: "../assets/sounds/Ancient Egyptian Music – The Nile River.mp3",
+  1: "../assets/sounds/Ancient Arabian Music – Ali Baba and the Forty Thieves.mp3",
+  2: "../assets/sounds/Epic Egyptian Music – Tomb Raiders.mp3", // Placeholder for level 2
+  3: "../assets/sounds/Middle Eastern Music - Magic Palace.mp3", // Placeholder for level 3
+};
+
+let currentMusic = new Audio(levelSoundTracks[0]);
+currentMusic.loop = true;
+currentMusic.volume = 0.3;
+
+export function playLevelMusic(level) {
+  if (levelSoundTracks[level]) {
+    const wasPlaying = !currentMusic.paused;
+    currentMusic.pause();
+    currentMusic.src = levelSoundTracks[level];
+    if (wasPlaying || document.getElementById("toggle-music").checked) {
+      currentMusic.play();
+    }
+  }
+}
+
+document.body.addEventListener(
+  "click",
+  () => {
+    if (
+      currentMusic.paused &&
+      document.getElementById("toggle-music").checked
+    ) {
+      currentMusic.play();
+    }
+  },
+  { once: true },
 );
-bgMusic.loop = true;
-bgMusic.volume = 0.3;
+
+document.getElementById("toggle-music").addEventListener("change", (e) => {
+  e.target.checked ? currentMusic.play() : currentMusic.pause();
+});
 
 const btnSfx = new Audio("../assets/sounds/menu-button-stone-41289.mp3");
 btnSfx.volume = 0.5;
