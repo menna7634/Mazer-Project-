@@ -25,7 +25,10 @@ export function playLevelMusic(level) {
 document.body.addEventListener(
   "click",
   () => {
-    if (currentMusic.paused && document.getElementById("toggle-music").checked) {
+    if (
+      currentMusic.paused &&
+      document.getElementById("toggle-music").checked
+    ) {
       currentMusic.play();
     }
   },
@@ -54,12 +57,12 @@ document.querySelectorAll(".menu-btn").forEach((btn) => {
   btn.addEventListener("click", playBtnSound);
 });
 
-const gateCloseSfx = new Audio("../assets/sounds/stoneGateClosing.mp3");
-const gateOpenSfx = new Audio("../assets/sounds/stoneGateOpenning.mp3");
+const gateCloseSfx = new Audio("../assets/sounds/stoneGateClosing.wav");
+const gateOpenSfx = new Audio("../assets/sounds/stoneGateOpenning.wav");
 
 export function gateModal(onMiddle) {
-  document.querySelector(".gate-modal").classList.add("closing");
-  
+  document.querySelector(".gate").classList.add("closing");
+
   if (document.getElementById("toggle-sfx").checked) {
     gateCloseSfx.currentTime = 0;
     gateCloseSfx.play();
@@ -69,8 +72,8 @@ export function gateModal(onMiddle) {
     if (onMiddle) {
       onMiddle();
     }
-    document.querySelector(".gate-modal").classList.remove("closing");
-    document.querySelector(".gate-modal").classList.add("opening");
+    document.querySelector(".gate").classList.remove("closing");
+    document.querySelector(".gate").classList.add("opening");
 
     if (document.getElementById("toggle-sfx").checked) {
       gateOpenSfx.currentTime = 0;
@@ -79,7 +82,7 @@ export function gateModal(onMiddle) {
   }, 2500);
 
   setTimeout(() => {
-    document.querySelector(".gate-modal").classList.remove("opening");
+    document.querySelector(".gate").classList.remove("opening");
     gateOpenSfx.pause();
     gateOpenSfx.currentTime = 0;
   }, 1500);
@@ -89,9 +92,11 @@ export function showScreen(screenClass) {
   if (screenClass === "home") {
     playLevelMusic(0);
   }
-  
-  document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
-  
+
+  document
+    .querySelectorAll(".screen")
+    .forEach((s) => s.classList.remove("active"));
+
   const screen = document.querySelector(`.screen.${screenClass}`);
   if (screen) {
     screen.classList.add("active");
@@ -151,12 +156,14 @@ document.getElementById("btn-lose-new-game").addEventListener("click", () => {
 });
 function refreshSlots() {
   const slots = StorageSystem.getAllSlots();
-  
+
   for (let i = 0; i < slots.length; i++) {
     const slot = slots[i];
     const slotNumber = slot.slotNumber;
 
-    const row = document.querySelector('.save-row[data-slot="' + slotNumber + '"]');
+    const row = document.querySelector(
+      '.save-row[data-slot="' + slotNumber + '"]',
+    );
     if (!row) continue;
 
     const levelCell = row.querySelector(".slot-level");
@@ -186,7 +193,7 @@ function refreshSlots() {
       };
 
       deleteButton.onclick = function () {
-        if (confirm('Are you sure you want to delete this save?')) {
+        if (confirm("Are you sure you want to delete this save?")) {
           StorageSystem.deleteSlot(slotNumber);
           refreshSlots();
         }

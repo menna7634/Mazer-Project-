@@ -7,7 +7,6 @@
     <link rel="icon" type="image/png" href="./assets/images/favicon.png" />
     <title>Mazer</title>
   </head>
-
   <body>
     <dialog id="pause-menu">
       <h2>pause</h2>
@@ -25,11 +24,10 @@
         <button onClick="no()" class="menu-btn">No</button>
       </menu>
     </dialog>
-    <div class="gate-modal">
+    <div class="gate">
       <div class="left-gate"></div>
       <div class="right-gate"></div>
     </div>
-    <!-- Loading Screen -->
     <div class="loading-screen">
       <div class="scrolling-content">
         <div class="hiero">
@@ -46,17 +44,11 @@
     </div>
     <main>
       <section class="screen home active">
-        <h2>Mazer</h2>
+        <h2 class="main-title">Mazer</h2>
         <menu class="buttons">
-          <button  class="menu-btn" id="btn-new-game">
-            New Game
-          </button>
-          <button class="menu-btn" id="btn-load-game">
-            Load Game
-          </button>
-          <button class="menu-btn" id="btn-settings">
-            Settings
-          </button>
+          <button class="menu-btn" id="btn-new-game">New Game</button>
+          <button class="menu-btn" id="btn-load-game">Load Game</button>
+          <button class="menu-btn" id="btn-settings">Settings</button>
         </menu>
       </section>
       <section class="screen game">
@@ -88,10 +80,9 @@
         </div>
       </section>
 
-      <!-- Load Game Screen -->
       <section class="screen load-game">
         <div class="load-game-container">
-          <h2 class="screen-title">Load Game</h2>
+          <h2 class="main-title">Load Game</h2>
 
           <table class="save-table">
             <thead class="save-row">
@@ -136,17 +127,13 @@
               </tr>
             </tbody>
           </table>
-
-          <div class="menu-btn btn-back" id="btn-back">
-            <h3>Back</h3>
-          </div>
+          <button class="menu-btn" id="btn-back">Back</button>
         </div>
       </section>
 
-      <!-- Settings Screen -->
       <section class="screen settings">
         <div class="settings-container">
-          <h2 class="screen-title">Settings</h2>
+          <h2 class="main-title">Settings</h2>
           <div class="settings-list">
             <div class="setting-item">
               <span class="setting-label">Music</span>
@@ -163,32 +150,22 @@
               </label>
             </div>
           </div>
-          <div class="menu-btn btn-back" id="btn-settings-back">
-            <h3>Back</h3>
-          </div>
+          <button class="menu-btn" id="btn-settings-back">Back</button>
         </div>
       </section>
 
-      <section class="screen win-screen ">
-        <div class="win-screen-container">
-        <div class="menu-btn btn-home" id="btn-win-home">
-          <h3>Home</h3>
-        </div>
-        <div class="menu-btn btn-new-game" id="btn-win-new-game">
-          <h3>New Game</h3>
-        </div>
-        </div>
+      <section class="screen win-screen">
+        <button class="menu-btn btn-home" id="btn-win-home">Home</button>
+        <button class="menu-btn btn-new-game" id="btn-win-new-game">
+          New Game
+        </button>
       </section>
 
-      <section class="screen lose-screen ">
-        <div class="lose-screen-container">
-        <div class="menu-btn btn-home" id="btn-lose-home">
-          <h3>Home</h3>
-        </div>
-        <div class="menu-btn btn-new-game" id="btn-lose-new-game">
-          <h3>Retry</h3>
-        </div>
-        </div>
+      <section class="screen lose-screen">
+        <button class="menu-btn btn-home" id="btn-lose-home">Home</button>
+        <button class="menu-btn btn-new-game" id="btn-lose-new-game">
+          Retry
+        </button>
       </section>
     </main>
 

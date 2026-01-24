@@ -1,8 +1,6 @@
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.8);
 }
-
-/* Pause Menu */
 #pause-menu {
   max-width: 28rem;
   padding: 2rem 4rem;
@@ -19,7 +17,6 @@ dialog::backdrop {
   border: 3px solid var(--tomb);
   border-bottom-width: 9px;
 }
-
 #pause-menu h2 {
   text-align: center;
   margin-bottom: var(--spacing-md);
@@ -64,52 +61,50 @@ dialog::backdrop {
   border: 3px solid var(--tomb);
   border-bottom-width: 9px;
 } */
-dialog#confirmation-modal {
-  max-width: 32rem;
-  background-image: url("../../assets/images/frames/modal .png");
-  background-size: cover;
-  background-repeat: no-repeat;
+#confirmation-modal {
+  width: 40rem;
+  padding: 4rem 0;
+  background-image: url("../../assets/images/frames/modal.png");
   background-position: center;
+  background-size: 145% 147%;
+  border-radius: var(--spacing-lg);
   position: absolute;
   top: 51%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-/* .modal-wrapper {
-  width: 60%;
-  height: 55%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  gap: var(--spacing-lg);
-  position: relative;
+#confirmation-modal img {
+  width: 40rem;
 }
-.modal-title {
+#confirmation-modal content {
+  position: absolute;
+}
+#confirmation-modal .modal-title {
   font-family: var(--font-display);
   font-size: var(--fs-2xl);
   font-weight: normal;
   color: var(--gold);
-  margin-top: var(--spacing-md);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   text-align: center;
+  margin-bottom: var(--spacing-lg);
 }
-.modal-message {
+#confirmation-modal .modal-message {
   font-family: var(--font-body);
   font-size: var(--fs-lg);
   color: var(--sand);
   text-align: center;
   max-width: 80%;
   line-height: 1.4;
-  margin-top: var(--spacing-md);
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: var(--spacing-2xl);
 }
-.modal-actions {
-  width: 100%;
+#confirmation-modal .buttons {
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  margin-top: var(--spacing-md);
+  justify-content: space-evenly;
 }
-.modal-actions .menu-btn {
-  transform: scale(0.7);
-} */
+#confirmation-modal .buttons .menu-btn {
+  width: 10rem;
+  height: 5rem;
+}
