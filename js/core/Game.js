@@ -87,7 +87,6 @@ class Game {
           startX = savedPosition.x;
           startY = savedPosition.y;
         } else {
-          // ✅ USE getStartPosition from Maze.js
           const startPos = getStartPosition();
           startX = startPos.col;
           startY = startPos.row;
@@ -105,7 +104,7 @@ class Game {
           spriteImage: sprite,
         });
 
-        this.updateUI(); // Update HUD with new player stats
+        this.updateUI(); 
         this.startGameLoop();
       };
 
@@ -115,8 +114,6 @@ class Game {
 
       sprite.src = "assets/sprites/player/player.png";
       enemySprite.src = "assets/images/game play /characters/enimies/mummy-02.png";
-
-      // this.updateUI() was here, moved to inside listener
 
       let timeForLevel = 60;
       if (num === 1) timeForLevel = 90;
