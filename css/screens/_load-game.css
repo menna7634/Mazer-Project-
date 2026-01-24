@@ -11,14 +11,6 @@
   padding: var(--spacing-xl);
   gap: var(--spacing-lg);
 }
-.screen-title {
-  font-family: var(--font-title);
-  font-size: var(--fs-4xl);
-  font-weight: normal;
-  color: var(--gold);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  margin-bottom: var(--spacing-lg);
-}
 .save-table {
   width: 100%;
   max-width: 700px;
@@ -34,15 +26,24 @@
   border-bottom: 2px solid var(--gold-dark);
 }
 .save-row {
-  background: linear-gradient(135deg, rgba(90, 74, 58, 0.9), rgba(45, 35, 23, 0.95));
+  background: linear-gradient(
+    135deg,
+    rgba(90, 74, 58, 0.9),
+    rgba(45, 35, 23, 0.95)
+  );
   transition: var(--transition-normal);
   cursor: pointer;
 }
 .save-row:hover {
-  background: linear-gradient(135deg, rgba(110, 90, 70, 0.95), rgba(60, 45, 30, 0.98));
+  background: linear-gradient(
+    135deg,
+    rgba(110, 90, 70, 0.95),
+    rgba(60, 45, 30, 0.98)
+  );
   box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
 }
-.save-row td, .save-row th {
+.save-row td,
+.save-row th {
   padding: var(--spacing-md);
   font-family: var(--font-body);
   color: var(--sand);

@@ -12,10 +12,6 @@
   font-size: var(--fs-lg);
   color: var(--stone-dark);
   font-weight: 500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
 }
 .menu-btn:hover {
   background-position: 50% 50.5%;
@@ -27,9 +23,6 @@
   transform: scale(0.98);
 }
 
-.btn-back {
-  margin-top: var(--spacing-lg);
-}
 .btn-load {
   background: linear-gradient(135deg, var(--gold-dark), var(--gold));
   color: var(--stone-dark);

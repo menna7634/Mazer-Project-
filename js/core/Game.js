@@ -111,6 +111,7 @@ class Game {
           spriteImage: sprite,
         });
 
+        this.updateUI();
         this.startGameLoop();
       };
 

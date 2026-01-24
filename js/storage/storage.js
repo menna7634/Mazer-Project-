@@ -67,6 +67,15 @@ class StorageSystem {
     return slots;
   }
 
+  static shiftSlotsDown() {
+    const slot1 = this.loadFromSlot(1);
+    const slot2 = this.loadFromSlot(2);
+    
+    if (slot2) this.saveToSlot(3, slot2);
+    if (slot1) this.saveToSlot(2, slot1);
+  }
+
+
   static clearAll() {
     for (let i = 1; i <= 3; i++) {
       this.deleteSlot(i);

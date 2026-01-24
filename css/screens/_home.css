@@ -7,27 +7,6 @@
   background-position: center;
   background-repeat: no-repeat;
 }
-
-.home h2 {
-  background: linear-gradient(
-    90deg,
-    #f4e4ba 0%,
-    #d4af37 25%,
-    #ffd700 50%,
-    #d4af37 75%,
-    #f4e4ba 100%
-  );
-  text-align: center;
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-family: var(--font-title);
-  font-size: var(--fs-5xl);
-  font-weight: normal;
-  animation: shimmer 10s linear infinite;
-  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8));
-}
 @keyframes shimmer {
   0% {
     background-position: -100% 0;
