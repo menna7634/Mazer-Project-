@@ -81,7 +81,8 @@ function loadLevelMaze(level,camera = {x:0 , y:0}) {
     let maze = mazesArr[level - 1];
     return loadAllImages().then(() => {
         //console.log("All images loaded!");
-        // Rendering moved to Game.js loop
+        drawMaze(maze, camera);
+        animateKeys(camera);
     });
 }
 
@@ -89,6 +90,8 @@ function drawMaze(maze, camera = { x: 0, y: 0 }) {
     currentCamera = camera;
     keyPositions = [];
     gemPositions = [];
+    //i used this to get the trap positions
+    trapPositions = [];
     for (let i = 0; i < maze.length; i++) {
         for (let j = 0; j < maze[i].length; j++) { // i for row(y) ,j for column(x)
             if (maze[i][j] === 0) {
@@ -116,6 +119,8 @@ function drawMaze(maze, camera = { x: 0, y: 0 }) {
             }else if(maze[i][j] === 4){
                 //drawTrap(j,i);
                 drawElement(j,i,trap);
+                //i used this to get the trap positions
+                trapPositions.push({ x: j, y: i });
             }
         }
 
@@ -124,6 +129,10 @@ function drawMaze(maze, camera = { x: 0, y: 0 }) {
 
 function drawElement(x,y,image){
     ctx.drawImage(image, x * TILE_SIZE - currentCamera.x, y * TILE_SIZE - currentCamera.y, TILE_SIZE, TILE_SIZE);
+}
+
+function drawPath(x, y) {
+    drawElement(x, y, path);
 }
 
 function isWall(row, col, level) { //checke the dimensions given is wall or not
@@ -135,7 +144,7 @@ function isWall(row, col, level) { //checke the dimensions given is wall or not
 }
 function isInsideMaze(row, col, level) { //check if the dimensions given outside the bounds of the array
     let maze = mazesArr[level - 1];
-    if (row > maze.length - 1 || col > maze[0].length - 1) {
+    if (row > maze.length - 1 || col > maze[0].length - 1 || row < 0 || col < 0) {
         //console.log("Outside");
         return false;
     }
@@ -147,7 +156,7 @@ function getStartPosition() { //return the start position of the player
         col: 0
     }
 }
-function getEndPosition() { // return the end position of the player
+function getEndPosition(level) { // return the end position of the player
     let maze = mazesArr[level - 1];
     return {
         row: maze.length - 1,
@@ -172,6 +181,24 @@ function getTrapPositions() { // return trap positions
 function removeElementfromMaze(row, col) { // remove life from maze and draw tile above it
     drawPath(col, row);
 }
+//i used insted of function loadLevelMaze in game
+function renderMaze(maze, camera) {
+    drawMaze(maze, camera);
+    animateKeys(camera);
+}
 
-
-export { loadLevelMaze, drawMaze, animateKeys};
+export { 
+    loadLevelMaze, 
+    drawMaze, 
+    animateKeys, 
+    renderMaze, 
+    getStartPosition, 
+    getEndPosition,
+    hasTrap,
+    hasLife,
+    getLifePositions,
+    getTrapPositions,
+    removeElementfromMaze,
+    isWall,
+    isInsideMaze
+};

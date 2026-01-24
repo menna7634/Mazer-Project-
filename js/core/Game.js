@@ -1,6 +1,6 @@
 import { StorageSystem } from "../storage/storage.js";
 import { mazes } from "../maze/MazeLevels.js";
-import { loadLevelMaze, drawMaze, animateKeys } from "../maze/Maze.js";
+import { loadLevelMaze, renderMaze, getStartPosition, hasTrap, hasLife } from "../maze/Maze.js";
 import { createPlayer } from "../player/PlayerController.js";
 import { createEnemy } from "../enemies/EnemyController.js";
 import HUD from "./HUD.js";
@@ -74,7 +74,7 @@ class Game {
 
     playLevelMusic(num);
 
-    loadLevelMaze(num).then(() => {
+    loadLevelMaze(num, this.camera).then(() => {
       const sprite = new Image();
       const enemySprite = new Image();
 
@@ -86,7 +86,13 @@ class Game {
         if (savedPosition) {
           startX = savedPosition.x;
           startY = savedPosition.y;
+        } else {
+          // ✅ USE getStartPosition from Maze.js
+          const startPos = getStartPosition();
+          startX = startPos.col;
+          startY = startPos.row;
         }
+        
         if (savedHearts) {
           lives = savedHearts;
         }
@@ -180,14 +186,12 @@ class Game {
   }
 
   handleTile(x, y) {
-    const tile = this.maze[y][x];
-
-    if (tile === 4) {
+    if (hasTrap(y, x, this.lvl)) {
       this.player.loseLife();
-    } else if (tile === 2) {
+    } else if (hasLife(y, x, this.lvl)) {
       this.player.gainLife();
       this.maze[y][x] = 0;
-    } else if (tile === 3) {
+    } else if (this.maze[y][x] === 3) {
       this.keys++;
       this.maze[y][x] = 0;
     }
@@ -239,12 +243,14 @@ class Game {
       if (slot2) StorageSystem.saveToSlot(3, slot2);
       if (slot1) StorageSystem.saveToSlot(2, slot1);
       
+      const startPos = getStartPosition();
+      
       StorageSystem.saveToSlot(1, {
         level: this.lvl,
         hearts: 3,
         keys: 0,
         time: nextTime,
-        playerPosition: { x: 0, y: 0 },
+        playerPosition: { x: startPos.col, y: startPos.row },
         mazeState: freshMaze
       });
     }
@@ -315,10 +321,8 @@ class Game {
     }
 
     if (this.maze && this.ctx) {
-      drawMaze(this.maze, this.camera);
+      renderMaze(this.maze, this.camera);
     }
-
-    animateKeys(this.camera);
 
     if (!this.paused) {
       for (let enemy of this.enemies) {
