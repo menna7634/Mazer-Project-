@@ -24,6 +24,7 @@ let staggerFrames = 20;
 let keyPositions = [];
 let gemPositions = [];
 let trapPositions = [];
+let mummyPositions = [];
 
 let currentCamera = { x: 0, y: 0 };
 
@@ -77,13 +78,8 @@ function animateKeys(camera = { x: 0, y: 0 }) {
 }
 
 // canvas width 1180 height 500
-function loadLevelMaze(level, camera = { x: 0, y: 0 }) {
-  let maze = mazesArr[level - 1];
-  return loadAllImages().then(() => {
-    //console.log("All images loaded!");
-    drawMaze(maze, camera);
-    animateKeys(camera);
-  });
+function loadLevelMaze() {
+  return loadAllImages();
 }
 
 function drawMaze(maze, camera = { x: 0, y: 0 }) {
@@ -96,32 +92,25 @@ function drawMaze(maze, camera = { x: 0, y: 0 }) {
     for (let j = 0; j < maze[i].length; j++) {
       // i for row(y) ,j for column(x)
       if (maze[i][j] === 0) {
-        //console.log(i,j);
-        //drawPath(j, i);
         drawElement(j, i, path);
       } else if (maze[i][j] === 1) {
-        //console.log(i, j);
-        //drawWall(j, i);
         drawElement(j, i, wall);
       } else if (maze[i][j] === 5) {
-        //drawDoor(j, i);
         drawElement(j, i, door);
       } else if (maze[i][j] === 3) {
-        //drawPath(j, i);
         drawElement(j, i, path);
         keyPositions.push({ x: j, y: i });
       } else if (maze[i][j] === 2) {
-        //drawPath(j, i);
         drawElement(j, i, path);
         gemPositions.push({ x: j, y: i });
       } else if (maze[i][j] === 6) {
         drawElement(j, i, openDoor);
-        //openClosedDoor(j,i);
       } else if (maze[i][j] === 4) {
-        //drawTrap(j,i);
         drawElement(j, i, trap);
         //i used this to get the trap positions
         trapPositions.push({ x: j, y: i });
+      }else if(maze[i][j] === 10){
+        mummyPositions.push({x:j , y:i});
       }
     }
   }
@@ -135,10 +124,6 @@ function drawElement(x, y, image) {
     TILE_SIZE,
     TILE_SIZE,
   );
-}
-
-function drawPath(x, y) {
-  drawElement(x, y, path);
 }
 
 function isWall(row, col, level) {
@@ -165,14 +150,7 @@ function getStartPosition() {
     col: 0,
   };
 }
-function getEndPosition(level) {
-  // return the end position of the player
-  let maze = mazesArr[level - 1];
-  return {
-    row: maze.length - 1,
-    col: maze[maze.length - 1].length - 1,
-  };
-}
+
 function hasTrap(row, col, level) {
   //return if the dimension given is a trap or not
   let maze = mazesArr[level - 1];
@@ -192,10 +170,16 @@ function getTrapPositions() {
   // return trap positions
   return [...trapPositions];
 }
-function removeElementfromMaze(row, col) {
-  // remove life from maze and draw tile above it
-  drawPath(col, row);
+function getMummyPositions(){
+    return [...mummyPositions];
 }
+
+
+function getMaze(level) {
+  // return the maze 2D array for the given level
+  return mazesArr[level - 1];
+}
+
 //i used insted of function loadLevelMaze in game
 function renderMaze(maze, camera) {
   drawMaze(maze, camera);
@@ -204,16 +188,14 @@ function renderMaze(maze, camera) {
 
 export {
   loadLevelMaze,
-  drawMaze,
-  animateKeys,
   renderMaze,
   getStartPosition,
-  getEndPosition,
   hasTrap,
   hasLife,
   getLifePositions,
   getTrapPositions,
-  removeElementfromMaze,
   isWall,
   isInsideMaze,
+  getMummyPositions,
+  getMaze
 };

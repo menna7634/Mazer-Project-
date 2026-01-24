@@ -1,11 +1,12 @@
 import { StorageSystem } from "../storage/storage.js";
-import { mazes } from "../maze/MazeLevels.js";
 import {
   loadLevelMaze,
   renderMaze,
   getStartPosition,
   hasTrap,
   hasLife,
+  getMummyPositions,
+  getMaze
 } from "../maze/Maze.js";
 import { createPlayer } from "../player/PlayerController.js";
 import { createEnemy } from "../enemies/EnemyController.js";
@@ -76,12 +77,12 @@ class Game {
     if (savedMaze) {
       this.maze = savedMaze.map((row) => [...row]);
     } else {
-      this.maze = mazes[num - 1].map((row) => [...row]);
+      this.maze = getMaze(num).map((row) => [...row]);
     }
 
     playLevelMusic(num);
 
-    loadLevelMaze(num, this.camera).then(() => {
+    loadLevelMaze().then(() => {
       const sprite = new Image();
       const enemySprite = new Image();
 
@@ -138,10 +139,9 @@ class Game {
   }
 
   spawnEnemies(spriteImage) {
-    for (let y = 0; y < this.maze.length; y++) {
-      for (let x = 0; x < this.maze[y].length; x++) {
-        if (this.maze[y][x] === 10) {
-          const enemy = createEnemy({
+    const mummyPositions = getMummyPositions();
+    mummyPositions.forEach(({x,y})=>{
+      const enemy = createEnemy({
             x: x,
             y: y,
             maze: this.maze,
@@ -149,9 +149,7 @@ class Game {
           });
           this.enemies.push(enemy);
           this.maze[y][x] = 0;
-        }
-      }
-    }
+    })
   }
 
   move(dir) {
@@ -168,24 +166,17 @@ class Game {
     if (this.player.movePlayer(dx, dy)) {
       const newPos = this.player.getPlayerPosition();
       this.handleTile(newPos.x, newPos.y);
-      this.checkEnemyCollision(newPos.x, newPos.y); //===========================
       this.updateUI();
-
-      if (!this.player.isPlayerAlive()) {
-        ///===============
-        this.gameOver(); //======================
-      } else if (this.checkWin(newPos)) {
+     if (this.checkWin(newPos)) {
         this.nextLvl();
       }
     }
   }
 
   checkEnemyCollision(playerX, playerY) {
-    ///==============================
     for (let enemy of this.enemies) {
       const enemyPos = enemy.getPosition();
       if (enemyPos.x === playerX && enemyPos.y === playerY) {
-        //get back to original position
         this.player.loseLife();
         if (this.player.isPlayerAlive()) {
           this.player.resetPlayerPosition();
@@ -193,14 +184,6 @@ class Game {
           this.gameOver();
           break;
         }
-
-        ///================check
-        console.log(this.player.getPlayerPosition());
-
-        // if (!this.player.isPlayerAlive()) {
-        //   //=================
-
-        // }
       }
     }
   }
@@ -215,6 +198,10 @@ class Game {
       this.keys++;
       this.maze[y][x] = 0;
     }
+    //check if the player is still alive after handling the tile
+    if (!this.player.isPlayerAlive()) {
+        this.gameOver();
+    }
 
     if (this.keys === 3) {
       this.maze[this.maze.length - 1][
@@ -225,58 +212,14 @@ class Game {
 
   checkWin(pos) {
     const tile = this.maze[pos.y][pos.x];
-
-    if (tile !== 5 && tile !== 6) {
-      return false;
-    }
-
-    if (tile === 6) {
-      return true;
-    }
-    return false;
+    return tile === 6;
   }
 
   nextLvl() {
     this.timer.stop();
     this.lvl = this.lvl + 1;
-
-    if (this.lvl <= mazes.length) {
-      const freshMaze = [];
-      const templateMaze = mazes[this.lvl - 1];
-      for (let i = 0; i < templateMaze.length; i++) {
-        freshMaze[i] = [];
-        for (let j = 0; j < templateMaze[i].length; j++) {
-          freshMaze[i][j] = templateMaze[i][j];
-        }
-      }
-
-      // var nextTime = 180;
-      // if (this.lvl === 2) nextTime = 180;
-      // if (this.lvl === 3) nextTime = 180;
-
-      const slot1 = StorageSystem.loadFromSlot(1);
-      const slot2 = StorageSystem.loadFromSlot(2);
-
-      if (slot2) StorageSystem.saveToSlot(3, slot2);
-      if (slot1) StorageSystem.saveToSlot(2, slot1);
-
-      const startPos = getStartPosition();
-
-      // StorageSystem.saveToSlot(1, {
-      //   level: this.lvl,
-      //   hearts: this.player.getLivesCount(),
-      //   keys: this.keys,
-      //   time: nextTime,
-      //   playerPosition: {
-      //     x: this.player.getPlayerPosition().x,
-      //     y: this.player.getPlayerPosition().y,
-      //   },
-      //   mazeState: freshMaze,
-      // });
-    }
-
     gateModal(() => {
-      if (this.lvl > mazes.length) {
+      if (this.lvl > 3) {
         showScreen("win-screen");
       } else {
         this.loadLvl(this.lvl);
@@ -370,23 +313,6 @@ class Game {
     }
 
     this.animationFrameId = requestAnimationFrame(this.gameLoop);
-
-    addEventListener("keydown", (e) => {
-      if (e.key === "s") {
-        StorageSystem.saveToSlot(1, {
-          level: this.lvl,
-          hearts: this.player.getLivesCount(),
-          keys: this.keys,
-          time:
-            this.timeForLevel - (new Date().getSeconds() - this.startingTime),
-          playerPosition: {
-            x: this.player.getPlayerPosition().x,
-            y: this.player.getPlayerPosition().y,
-          },
-          mazeState: this.maze,
-        });
-      }
-    });
   };
 
   renderPlayer() {
@@ -504,6 +430,26 @@ document.addEventListener("keydown", (e) => {
       return;
     }
   }
+  //handles s to save whenever it is pressed
+  if(e.key==="s" && game.running){
+  let slotData2 = StorageSystem.loadFromSlot(1);
+  let slotData3 = StorageSystem.loadFromSlot(2);
+  if(slotData2){
+    StorageSystem.saveToSlot(2,slotData2);
+  }
+  if(slotData3){
+    StorageSystem.saveToSlot(3,slotData3)
+  }
+  StorageSystem.saveToSlot(1, {
+            level: game.lvl,
+            hearts: game.player.getLivesCount(),
+            keys: game.keys,
+            time: game.timeForLevel - (new Date().getSeconds() - game.startingTime),
+            playerPosition: game.player.getPlayerPosition(),
+            mazeState: game.maze,
+        });
+      }
+
 
   if (!game.running || game.paused) return;
 
