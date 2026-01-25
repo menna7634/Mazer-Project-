@@ -24,6 +24,7 @@
   overflow: hidden;
   width: 250%;
   animation: infiniteScroll 30s linear infinite;
+  will-change: transform;
 }
 
 .loading-screen .scrolling-content .hiero {
