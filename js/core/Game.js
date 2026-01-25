@@ -6,7 +6,7 @@ import {
   hasTrap,
   hasLife,
   getMummyPositions,
-  getMaze
+  getMaze,
 } from "../maze/Maze.js";
 import { createPlayer } from "../player/PlayerController.js";
 import { createEnemy } from "../enemies/EnemyController.js";
@@ -29,7 +29,7 @@ class Game {
 
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas ? this.canvas.getContext("2d") : null;
-    this.TILE_SIZE = 80;
+    this.TILE_SIZE = 120;
 
     this.camera = new Camera(
       this.canvas ? this.canvas.width : 800,
@@ -140,16 +140,16 @@ class Game {
 
   spawnEnemies(spriteImage) {
     const mummyPositions = getMummyPositions();
-    mummyPositions.forEach(({x,y})=>{
+    mummyPositions.forEach(({ x, y }) => {
       const enemy = createEnemy({
-            x: x,
-            y: y,
-            maze: this.maze,
-            spriteImage: spriteImage,
-          });
-          this.enemies.push(enemy);
-          this.maze[y][x] = 0;
-    })
+        x: x,
+        y: y,
+        maze: this.maze,
+        spriteImage: spriteImage,
+      });
+      this.enemies.push(enemy);
+      this.maze[y][x] = 0;
+    });
   }
 
   move(dir) {
@@ -167,7 +167,7 @@ class Game {
       const newPos = this.player.getPlayerPosition();
       this.handleTile(newPos.x, newPos.y);
       this.updateUI();
-     if (this.checkWin(newPos)) {
+      if (this.checkWin(newPos)) {
         this.nextLvl();
       }
     }
@@ -200,7 +200,7 @@ class Game {
     }
     //check if the player is still alive after handling the tile
     if (!this.player.isPlayerAlive()) {
-        this.gameOver();
+      this.gameOver();
     }
 
     if (this.keys === 3) {
@@ -340,8 +340,8 @@ class Game {
     const playerYCord =
       playerPos.y * this.TILE_SIZE - this.camera.y + this.TILE_SIZE / 2;
 
-    const lightRadius = 400;
-    const fadeWidth = 100;
+    const lightRadius = 200;
+    const fadeWidth = 60;
 
     this.ctx.save();
 
@@ -391,6 +391,18 @@ class Game {
 
     this.ctx.restore();
   }
+
+  saveGame() {
+    StorageSystem.shiftSlotsDown();
+    StorageSystem.saveToSlot(1, {
+      level: this.lvl,
+      hearts: this.player.getLivesCount(),
+      keys: this.keys,
+      time: this.timeForLevel - (new Date().getSeconds() - this.startingTime),
+      playerPosition: this.player.getPlayerPosition(),
+      mazeState: this.maze,
+    });
+  }
 }
 
 const game = new Game();
@@ -399,6 +411,11 @@ window.game = game;
 window.onResume = function () {
   game.togglePause(false);
   document.getElementById("pause-menu").close();
+};
+
+window.onSave = function () {
+  game.saveGame();
+  window.onResume();
 };
 
 window.onRestart = function () {
@@ -431,25 +448,9 @@ document.addEventListener("keydown", (e) => {
     }
   }
   //handles s to save whenever it is pressed
-  if(e.key==="s" && game.running){
-  let slotData2 = StorageSystem.loadFromSlot(1);
-  let slotData3 = StorageSystem.loadFromSlot(2);
-  if(slotData2){
-    StorageSystem.saveToSlot(2,slotData2);
+  if (e.key === "s" && game.running) {
+    game.saveGame();
   }
-  if(slotData3){
-    StorageSystem.saveToSlot(3,slotData3)
-  }
-  StorageSystem.saveToSlot(1, {
-            level: game.lvl,
-            hearts: game.player.getLivesCount(),
-            keys: game.keys,
-            time: game.timeForLevel - (new Date().getSeconds() - game.startingTime),
-            playerPosition: game.player.getPlayerPosition(),
-            mazeState: game.maze,
-        });
-      }
-
 
   if (!game.running || game.paused) return;
 

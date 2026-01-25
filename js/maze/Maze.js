@@ -4,7 +4,7 @@ import { images, loadAllImages } from "./ImageLoader.js";
 let canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let mazesArr = mazes;
-const TILE_SIZE = 80;
+const TILE_SIZE = 120;
 
 // Import images
 let path = images.path;

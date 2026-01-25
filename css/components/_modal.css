@@ -2,10 +2,10 @@ dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.8);
 }
 #pause-menu {
-  max-width: 28rem;
+  max-width: 35rem;
   padding: 2rem 4rem;
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6)),
     url("../../assets/images/frames/pause-overlay.png");
   background-size: cover;
   background-position: center;
@@ -16,6 +16,7 @@ dialog::backdrop {
   border-radius: var(--radius-xl);
   border: 3px solid var(--tomb);
   border-bottom-width: 9px;
+  overflow: auto;
 }
 #pause-menu h2 {
   text-align: center;
@@ -42,7 +43,7 @@ dialog::backdrop {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 /* dialog#pause-menu {

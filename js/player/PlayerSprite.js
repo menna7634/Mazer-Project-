@@ -1,5 +1,5 @@
-const animationSpeed = 30;
-const moveSpeed = 0.12;
+const animationSpeed = 25;
+const moveSpeed = 0.1;
 
 export default class PlayerSprite {
   constructor(image) {
