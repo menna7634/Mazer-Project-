@@ -1,5 +1,5 @@
-import { mazes } from "/MazeLevels.js";
-import { images, loadAllImages } from "/ImageLoader.js";
+import { mazes } from "./MazeLevels.js";
+import { images, loadAllImages } from "./ImageLoader.js";
 
 let canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -109,8 +109,8 @@ function drawMaze(maze, camera = { x: 0, y: 0 }) {
         drawElement(j, i, trap);
         //i used this to get the trap positions
         trapPositions.push({ x: j, y: i });
-      }else if(maze[i][j] === 10){
-        mummyPositions.push({x:j , y:i});
+      } else if (maze[i][j] === 10) {
+        mummyPositions.push({ x: j, y: i });
       }
     }
   }
@@ -170,10 +170,9 @@ function getTrapPositions() {
   // return trap positions
   return [...trapPositions];
 }
-function getMummyPositions(){
-    return [...mummyPositions];
+function getMummyPositions() {
+  return [...mummyPositions];
 }
-
 
 function getMaze(level) {
   // return the maze 2D array for the given level
@@ -197,5 +196,5 @@ export {
   isWall,
   isInsideMaze,
   getMummyPositions,
-  getMaze
+  getMaze,
 };

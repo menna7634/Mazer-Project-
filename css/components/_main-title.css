@@ -18,3 +18,11 @@
   animation: shimmer 10s linear infinite;
   filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8));
 }
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}

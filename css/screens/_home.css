@@ -7,14 +7,6 @@
   background-position: center;
   background-repeat: no-repeat;
 }
-@keyframes shimmer {
-  0% {
-    background-position: -100% 0;
-  }
-  100% {
-    background-position: 100% 0;
-  }
-}
 .home .buttons {
   display: flex;
   flex-direction: column;

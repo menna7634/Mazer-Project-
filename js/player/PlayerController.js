@@ -1,6 +1,6 @@
-import Player from "/Player.js";
-import PlayerMovement from "/PlayerMovement.js";
-import PlayerSprite from "/PlayerSprite.js";
+import Player from "./Player.js";
+import PlayerMovement from "./PlayerMovement.js";
+import PlayerSprite from "./PlayerSprite.js";
 
 export function createPlayer({ startX, startY, lives, maze, spriteImage }) {
   const player = new Player(startX, startY, lives);

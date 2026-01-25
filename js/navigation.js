@@ -1,4 +1,4 @@
-import { StorageSystem } from "/storage/storage.js";
+import { StorageSystem } from "./storage/storage.js";
 
 const levelSoundTracks = {
   0: "../assets/sounds/Ancient Egyptian Music – The Nile River.mp3",

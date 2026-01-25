@@ -1,5 +1,4 @@
-
-import HUD from './HUD.js';
+import HUD from "./HUD.js";
 
 class Timer {
   constructor() {
@@ -13,7 +12,7 @@ class Timer {
     this.timeLeft = seconds;
     this.gameReference = game;
     this.isPaused = false;
-    
+
     if (this.timerId) {
       clearInterval(this.timerId);
     }
@@ -24,7 +23,7 @@ class Timer {
       if (!this.isPaused) {
         this.timeLeft = this.timeLeft - 1;
         HUD.updateTimer(this.timeLeft);
-        
+
         if (this.timeLeft <= 0) {
           this.stop();
           this.gameReference.gameOver();

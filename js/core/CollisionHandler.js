@@ -1,6 +1,4 @@
-
 class CollisionHandler {
-  
   static getTileType(maze, x, y) {
     if (!maze || !maze[y] || !maze[y][x]) return null;
     return maze[y][x];

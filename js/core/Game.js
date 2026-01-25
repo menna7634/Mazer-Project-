@@ -10,9 +10,9 @@ import {
 } from "../maze/Maze.js";
 import { createPlayer } from "../player/PlayerController.js";
 import { createEnemy } from "../enemies/EnemyController.js";
-import HUD from "/HUD.js";
-import Timer from "/Timer.js";
-import Camera from "/Camera.js";
+import HUD from "./HUD.js";
+import Timer from "./Timer.js";
+import Camera from "./Camera.js";
 import { gateModal, showScreen, playLevelMusic } from "../navigation.js";
 
 class Game {
@@ -442,6 +442,9 @@ document.addEventListener("keydown", (e) => {
         const pauseMenu = document.getElementById("pause-menu");
         if (pauseMenu) {
           pauseMenu.showModal();
+          setTimeout(() => {
+            document.activeElement.blur();
+          }, 0);
         }
       }
       return;
