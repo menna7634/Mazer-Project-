@@ -75,13 +75,6 @@ class StorageSystem {
     if (slot1) this.saveToSlot(2, slot1);
   }
 
-
-  static clearAll() {
-    for (let i = 1; i <= 3; i++) {
-      this.deleteSlot(i);
-    }
-    return true;
-  }
 }
 
 export { StorageSystem };
