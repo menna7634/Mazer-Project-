@@ -45,16 +45,19 @@ document.getElementById("toggle-music").addEventListener("change", (e) => {
 
 const btnSfx = new Audio("../assets/sounds/menu-button-stone-41289.mp3");
 btnSfx.volume = 0.5;
+const btnHoverSfx = new Audio("../assets/sounds/menu-button-hover-stone.flac");
+btnHoverSfx.volume = 0.5;
 
-function playBtnSound() {
+function playBtnSound(sound) {
   if (document.getElementById("toggle-sfx").checked) {
-    btnSfx.currentTime = 0;
-    btnSfx.play();
+    sound.currentTime = 0;
+    sound.play();
   }
 }
 
 document.querySelectorAll(".menu-btn").forEach((btn) => {
-  btn.addEventListener("click", playBtnSound);
+  btn.addEventListener("click", () => playBtnSound(btnSfx));
+  btn.addEventListener("mouseenter", () => playBtnSound(btnHoverSfx));
 });
 
 const gateCloseSfx = new Audio("../assets/sounds/stoneGateClosing.wav");
@@ -119,6 +122,14 @@ document.getElementById("btn-load-game").addEventListener("click", () => {
 
 document.getElementById("btn-settings").addEventListener("click", () => {
   showScreen("settings");
+});
+
+document.getElementById("btn-rules").addEventListener("click", () => {
+  document.getElementById("rules").showModal();
+});
+
+document.getElementById("btn-rules-close").addEventListener("click", () => {
+  document.getElementById("rules").close();
 });
 
 document.getElementById("btn-back").addEventListener("click", () => {

@@ -1,9 +1,12 @@
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.8);
 }
-#pause-menu {
+dialog .menu-btn {
+  width: 11rem;
+  height: 5rem;
+}
+.modal {
   max-height: calc(100% - 1.3rem);
-  max-width: 30rem;
   padding: 1.3rem 4rem;
   background-image:
     linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6)),
@@ -18,7 +21,10 @@ dialog::backdrop {
   border: 3px solid var(--tomb);
   border-bottom-width: 9px;
 }
-#pause-menu h2 {
+#pause-menu {
+  max-width: 30rem;
+}
+#pause-menu .main-title {
   margin-bottom: var(--spacing-md);
   font-size: var(--fs-3xl);
 }
@@ -27,11 +33,6 @@ dialog::backdrop {
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-md);
-}
-#pause-menu .buttons .menu-btn {
-  width: 11rem;
-  height: 5rem;
-  /* font-size: var(--fs-); */
 }
 #confirmation-modal {
   width: 40rem;
@@ -76,7 +77,35 @@ dialog::backdrop {
   align-items: center;
   justify-content: space-evenly;
 }
-#confirmation-modal .buttons .menu-btn {
+#rules {
+  min-width: 45rem;
+  color: white;
+  font-weight: bold;
+  padding: 2rem 2.5rem;
+}
+#rules .main-title {
+  font-size: var(--fs-3xl);
+  text-wrap: nowrap;
+  margin-bottom: var(--spacing-sm);
+}
+#rules h3 {
+  color: var(--gold);
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-xs);
+}
+#rules p {
+  margin-bottom: var(--spacing-md);
+}
+#rules li {
+  margin-left: var(--spacing-xl);
+}
+#rules .flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+#rules .menu-btn {
   width: 10rem;
-  height: 5rem;
+  height: 4.5rem;
 }

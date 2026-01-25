@@ -8,7 +8,7 @@
     <title>Mazer</title>
   </head>
   <body>
-    <dialog id="pause-menu">
+    <dialog id="pause-menu" class="modal">
       <h2 class="main-title">pause</h2>
       <menu class="buttons">
         <button onClick="onResume()" class="menu-btn">Resume</button>
@@ -24,6 +24,34 @@
         <button onClick="yes()" class="menu-btn">Yes</button>
         <button onClick="no()" class="menu-btn">No</button>
       </menu>
+    </dialog>
+    <dialog id="rules" class="modal">
+      <h2 class="main-title">𓂀 rules 𓂀</h2>
+      <!-- <h3>Tomb of the Forgotten Pharaoh</h3> -->
+      <p>
+        Welcome, Explorer! You have entered the ancient burial chambers of a
+        lost king. The air is heavy, the walls are shifting, and you aren’t
+        alone. Do you have what it takes to find the exit, or will you become
+        just another resident of the tomb?
+      </p>
+      <h3>objective</h3>
+      <p>
+        Your goal is simple but dangerous: Find the exit door and escape. The
+        door is sealed by ancient magic and can only be opened once you have
+        collected all the Hidden Keys scattered throughout the maze.
+      </p>
+      <div class="flex">
+        <div>
+          <h3>how to play</h3>
+          <ol>
+            <li>Up Arrow (↑): Move Forward / North</li>
+            <li>Down Arrow (↓): Move Backward / South</li>
+            <li>Left Arrow (←): Turn Left / West</li>
+            <li>Right Arrow (→): Turn Right / East</li>
+          </ol>
+        </div>
+        <button id="btn-rules-close" class="menu-btn">OK</button>
+      </div>
     </dialog>
     <div class="gate">
       <div class="left-gate"></div>
@@ -49,30 +77,8 @@
         <button class="menu-btn" id="btn-new-game">New Game</button>
         <button class="menu-btn" id="btn-load-game">Load Game</button>
         <button class="menu-btn" id="btn-settings">Settings</button>
+        <button class="menu-btn" id="btn-rules">Rules</button>
       </menu>
-    </section>
-    <section class="screen game">
-      <div class="game-arena">
-        <div class="playground">
-          <div class="hud">
-            <div class="hud-item heart-hud">
-              <span class="hud-content">❤️❤️❤️</span>
-            </div>
-            <div class="hud-item key-hud">
-              <span class="hud-content">🔑 0/3</span>
-            </div>
-            <div class="hud-item timer-hud">
-              <span class="hud-content">00:00</span>
-            </div>
-            <div class="hud-item level-hud">
-              <span class="hud-content">Level 1</span>
-            </div>
-          </div>
-          <div class="game-canvas-container">
-            <canvas id="canvas" width="1180px" height="510px"></canvas>
-          </div>
-        </div>
-      </div>
     </section>
     <section class="screen load-game">
       <div class="load-game-container">
@@ -156,6 +162,29 @@
       <button class="menu-btn btn-new-game" id="btn-lose-new-game">
         Retry
       </button>
+    </section>
+    <section class="screen game">
+      <div class="game-arena">
+        <div class="playground">
+          <div class="hud">
+            <div class="hud-item heart-hud">
+              <span class="hud-content">❤️❤️❤️</span>
+            </div>
+            <div class="hud-item key-hud">
+              <span class="hud-content">🔑 0/3</span>
+            </div>
+            <div class="hud-item timer-hud">
+              <span class="hud-content">00:00</span>
+            </div>
+            <div class="hud-item level-hud">
+              <span class="hud-content">Level 1</span>
+            </div>
+          </div>
+          <div class="game-canvas-container">
+            <canvas id="canvas" width="1180px" height="510px"></canvas>
+          </div>
+        </div>
+      </div>
     </section>
     <script type="module" src="./js/navigation.js"></script>
     <script type="module" src="./js/core/Game.js"></script>

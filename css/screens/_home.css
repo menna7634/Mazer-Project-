@@ -1,7 +1,4 @@
 .home {
-  width: 100%;
-  min-height: 100vh;
-  position: relative;
   background-image: url("../../assets/images/frames/home.png");
   background-size: cover;
   background-position: center;
@@ -10,11 +7,6 @@
 .home .buttons {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--spacing-2xl);
-  gap: var(--spacing-lg);
-}
-
-.home .buttons .menu-btn {
-  width: 13rem;
-  height: 6.5rem;
+  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
