@@ -201,3 +201,16 @@ function refreshSlots() {
     }
   }
 }
+
+function checkScreenSize() {
+  if (window.innerWidth <= 1024) {
+    showScreen("mobile-warning");
+  } else {
+    if (document.querySelector(".screen.mobile-warning.active")) {
+      showScreen("home");
+    }
+  }
+}
+
+window.addEventListener("resize", checkScreenSize);
+checkScreenSize();

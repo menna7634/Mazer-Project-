@@ -73,7 +73,9 @@
 }
 .loading-screen .loading-text {
   font-family: var(--font-display);
-  font-size: var(--fs-xl);
+  font-size: var(--fs-lg);
+  text-align: center;
+
   color: var(--gold);
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -87,4 +89,13 @@
   50% {
     opacity: 1;
   }
+}
+
+.loading-screen strong {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--gold);
+  margin-top: 1rem;
+  display: block;
+  animation: fadeText 2s ease-in-out infinite;
 }
