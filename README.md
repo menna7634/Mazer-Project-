@@ -1,7 +1,7 @@
-<div align="center">
+<div id="top" align="center">
 
 ```
-███╗   ███╗ █████╗ ███████╗███████╗██████╗ 
+███╗   ███╗ █████╗ ███████╗███████╗██████╗
 ████╗ ████║██╔══██╗╚══███╔╝██╔════╝██╔══██╗
 ██╔████╔██║███████║  ███╔╝ █████╗  ██████╔╝
 ██║╚██╔╝██║██╔══██║ ███╔╝  ██╔══╝  ██╔══██╗
@@ -16,7 +16,7 @@
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![Canvas](https://img.shields.io/badge/Canvas_API-FF6F00?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 
-[🎮 Play Live Demo](https://menna7634.github.io/Mazer-Project) • [📝 Report Bug](https://github.com/menna7634/Mazer-Project/issues) • [✨ Request Feature](https://github.com/menna7634/Mazer-Project/issues)
+[🎮 Play Live Demo](https://mazer-project.vercel.app/) • [📝 Report Bug](https://github.com/menna7634/Mazer-Project/issues) • [✨ Request Feature](https://github.com/menna7634/Mazer-Project/issues)
 
 ![Mazer Gameplay](./assets/screenshots/gameplay.gif)
 
@@ -46,8 +46,8 @@
 
 <div align="center">
 
-| Home Screen | Gameplay | Victory |
-|-------------|----------|---------|
+| Home Screen                            | Gameplay                               | Victory                              |
+| -------------------------------------- | -------------------------------------- | ------------------------------------ |
 | ![Home](./assets/screenshots/home.png) | ![Game](./assets/screenshots/game.png) | ![Win](./assets/screenshots/win.png) |
 
 </div>
@@ -64,24 +64,27 @@
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/menna7634/Mazer-Project.git
    cd mazer
    ```
 
 2. **Run with a local server** (recommended)
+
    ```bash
    # Using Python 3
    python -m http.server 8000
-   
+
    # Using Node.js (http-server)
    npx http-server
-   
+
    # Using PHP
    php -S localhost:8000
    ```
 
 3. **Open in browser**
+
    ```
    http://localhost:8000
    ```
@@ -94,14 +97,14 @@
 
 ### Controls
 
-| Key | Action |
-|-----|--------|
-| `↑` | Move Up |
-| `↓` | Move Down |
-| `←` | Move Left |
-| `→` | Move Right |
+| Key   | Action     |
+| ----- | ---------- |
+| `↑`   | Move Up    |
+| `↓`   | Move Down  |
+| `←`   | Move Left  |
+| `→`   | Move Right |
 | `Esc` | Pause Menu |
-| `S` | Quick Save |
+| `S`   | Quick Save |
 
 ### Game Mechanics
 
@@ -164,10 +167,11 @@ mazer/
 class PlayerMovement {
   movePlayer(dx, dy) {
     const { x, y } = this.player.getPlayerPosition();
-    const newX = x + dx, newY = y + dy;
-    
+    const newX = x + dx,
+      newY = y + dy;
+
     if (!this.canMoveTo(newX, newY)) return false;
-    
+
     this.player.setPlayerPosition(newX, newY);
     this.player.setMoving(true);
     return true;
@@ -306,6 +310,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ by ITI Open Source Track - Intake 46**
 
-[⬆ back to top](#)
+[⬆ back to top](#top)
 
 </div>
