@@ -14,6 +14,7 @@ import HUD from "./HUD.js";
 import Timer from "./Timer.js";
 import Camera from "./Camera.js";
 import { gateModal, showScreen, playLevelMusic } from "../navigation.js";
+import { CONFIG } from "../config/GameConfig.js";
 
 class Game {
   constructor() {
@@ -29,7 +30,7 @@ class Game {
 
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas ? this.canvas.getContext("2d") : null;
-    this.TILE_SIZE = 120;
+    this.TILE_SIZE = CONFIG.TILE_SIZE;
 
     this.camera = new Camera(
       this.canvas ? this.canvas.width : 800,
@@ -126,9 +127,9 @@ class Game {
 
       this.updateUI();
 
-      if (num === 1) this.timeForLevel = 90;
-      if (num === 2) this.timeForLevel = 120;
-      if (num === 3) this.timeForLevel = 180;
+      if (CONFIG.LEVEL_TIMES[num]) {
+        this.timeForLevel = CONFIG.LEVEL_TIMES[num];
+      }
 
       if (savedTime) {
         this.timeForLevel = savedTime;
@@ -340,8 +341,8 @@ class Game {
     const playerYCord =
       playerPos.y * this.TILE_SIZE - this.camera.y + this.TILE_SIZE / 2;
 
-    const lightRadius = 200;
-    const fadeWidth = 60;
+    const lightRadius = CONFIG.CAMERA.LIGHT_RADIUS;
+    const fadeWidth = CONFIG.CAMERA.FADE_WIDTH;
 
     this.ctx.save();
 

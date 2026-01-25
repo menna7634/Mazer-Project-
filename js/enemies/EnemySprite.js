@@ -1,11 +1,13 @@
-const animationSpeed = 100;
-const moveSpeed = 0.08;
+import { CONFIG } from "../config/GameConfig.js";
+
+const animationSpeed = CONFIG.ENEMY.ANIMATION_SPEED;
+const moveSpeed = CONFIG.ENEMY.MOVE_SPEED;
 
 export default class EnemySprite {
   constructor(image) {
     this.image = image;
-    this.frameWidth = image.width / 3;  
-    this.frameHeight = image.height / 4; 
+    this.frameWidth = image.width / CONFIG.ENEMY.SPRITE_COLS;
+    this.frameHeight = image.height / CONFIG.ENEMY.SPRITE_ROWS; 
     this.currentFrame = 0;
     this.frameTimer = 0;
     this.visualX = null;
@@ -23,7 +25,7 @@ export default class EnemySprite {
     this.frameTimer += deltaTime;
     if (this.frameTimer >= animationSpeed) {
       this.frameTimer = 0;
-      this.currentFrame = (this.currentFrame + 1) % 3; 
+      this.currentFrame = (this.currentFrame + 1) % CONFIG.ENEMY.SPRITE_COLS; 
     }
   }
 
