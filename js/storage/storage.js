@@ -1,5 +1,10 @@
 
 class StorageSystem {
+  static #storage = localStorage;
+
+  static #getKey(slotNumber) {
+    return `mazer_save_slot_${slotNumber}`;
+  }
 
   static saveToSlot(slotNumber, gameData) {
     if (slotNumber < 1 || slotNumber > 3) {
@@ -16,8 +21,7 @@ class StorageSystem {
       date: new Date().toISOString()
     };
 
-    const key = `mazer_save_slot_${slotNumber}`;
-    localStorage.setItem(key, JSON.stringify(saveData));
+    this.#storage.setItem(this.#getKey(slotNumber), JSON.stringify(saveData));
     return true;
   }
 
@@ -26,8 +30,7 @@ class StorageSystem {
       return null;
     }
 
-    const key = `mazer_save_slot_${slotNumber}`;
-    const savedData = localStorage.getItem(key);
+    const savedData = this.#storage.getItem(this.#getKey(slotNumber));
 
     if (!savedData) {
       return null;
@@ -41,14 +44,12 @@ class StorageSystem {
       return false;
     }
 
-    const key = `mazer_save_slot_${slotNumber}`;
-    localStorage.removeItem(key);
+    this.#storage.removeItem(this.#getKey(slotNumber));
     return true;
   }
 
   static isSlotEmpty(slotNumber) {
-    const key = `mazer_save_slot_${slotNumber}`;
-    return localStorage.getItem(key) === null;
+    return this.#storage.getItem(this.#getKey(slotNumber)) === null;
   }
 
   static getAllSlots() {
@@ -74,7 +75,6 @@ class StorageSystem {
     if (slot2) this.saveToSlot(3, slot2);
     if (slot1) this.saveToSlot(2, slot1);
   }
-
 }
 
 export { StorageSystem };

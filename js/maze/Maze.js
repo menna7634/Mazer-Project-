@@ -1,10 +1,11 @@
 import { mazes } from "./MazeLevels.js";
 import { images, loadAllImages } from "./ImageLoader.js";
+import { CONFIG } from "../config/GameConfig.js";
 
 let canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let mazesArr = mazes;
-const TILE_SIZE = 120;
+const TILE_SIZE = CONFIG.TILE_SIZE;
 
 // Import images
 let path = images.path;

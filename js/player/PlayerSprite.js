@@ -1,11 +1,12 @@
-const animationSpeed = 25;
-const moveSpeed = 0.1;
+import { CONFIG } from "../config/GameConfig.js";
+const animationSpeed = CONFIG.PLAYER.ANIMATION_SPEED;
+const moveSpeed = CONFIG.PLAYER.MOVE_SPEED;
 
 export default class PlayerSprite {
   constructor(image) {
     this.image = image;
-    this.frameWidth = image.width / 9;
-    this.frameHeight = image.height / 4;
+    this.frameWidth = image.width / CONFIG.PLAYER.SPRITE_COLS;
+    this.frameHeight = image.height / CONFIG.PLAYER.SPRITE_ROWS;
     this.currentFrame = 0;
     this.frameTimer = 0;
 
@@ -22,7 +23,7 @@ export default class PlayerSprite {
     this.frameTimer += deltaTime;
     if (this.frameTimer >= animationSpeed) {
       this.frameTimer = 0;
-      this.currentFrame = (this.currentFrame + 1) % 9;
+      this.currentFrame = (this.currentFrame + 1) % CONFIG.PLAYER.SPRITE_COLS;
     }
   }
 

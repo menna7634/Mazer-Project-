@@ -1,10 +1,12 @@
+import { CONFIG } from "../config/GameConfig.js";
+
 export default class EnemyMovement {
   constructor(enemy, maze) {
     this.enemy = enemy;
     this.maze = maze;
     const { x, y } = enemy.getPosition();
     this.dir = this.chooseInitialDirection(x, y);
-    this.moveDelay = 600;
+    this.moveDelay = CONFIG.ENEMY.MOVE_DELAY;
     this.lastMoveTime = 0;
     this.isCurrentlyMoving = false;
     this.justMoved = false;

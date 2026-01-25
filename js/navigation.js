@@ -167,20 +167,17 @@ function refreshSlots() {
     if (!row) continue;
 
     const levelCell = row.querySelector(".slot-level");
-    const scoreCell = row.querySelector(".slot-score");
     const dateCell = row.querySelector(".slot-date");
     const loadButton = row.querySelector(".btn-load");
     const deleteButton = row.querySelector(".btn-delete");
 
     if (slot.isEmpty) {
       levelCell.textContent = "-";
-      scoreCell.textContent = "-";
       dateCell.textContent = "Empty";
       loadButton.disabled = true;
       deleteButton.disabled = true;
     } else {
       levelCell.textContent = "Level " + slot.data.level;
-      scoreCell.textContent = slot.data.keys || 0;
       dateCell.textContent = new Date(slot.data.date).toLocaleDateString();
       loadButton.disabled = false;
       deleteButton.disabled = false;
