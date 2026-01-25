@@ -93,7 +93,14 @@ export function gateModal(onMiddle) {
 
 export function showScreen(screenClass) {
   if (screenClass === "home") {
-    playLevelMusic(0);
+    const currentScreen = document.querySelector(".screen.active");
+    const isFromLoadOrSettings =
+      currentScreen?.classList.contains("load-game") ||
+      currentScreen?.classList.contains("settings");
+
+    if (!isFromLoadOrSettings) {
+      playLevelMusic(0);
+    }
   }
 
   document
